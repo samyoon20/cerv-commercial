@@ -245,36 +245,35 @@ export default function DashboardTab() {
                       styles.propertyCard,
                       selectedProperty.id === property.id && styles.propertyCardSelected
                     ]}
-                <View style={styles.scoreRow}>
-                  <Text style={styles.scoreCategory}>Maintenance</Text>
-                  <View style={styles.scoreBarContainer}>
-                    <View style={[styles.scoreBar, {width: `${currentScore.maintenance}%`, backgroundColor: getScoreColor(currentScore.maintenance)}]} />
+                  onPress={() => handlePropertySelect(property)}
+                >
+                  <View style={[
+                    styles.propertyCardContent,
+                    selectedProperty.id === property.id && styles.propertyCardContentSelected
+                  ]}>
+                    <Text style={[
+                      styles.propertyName,
+                      selectedProperty.id === property.id && styles.propertyNameSelected
+                    ]}>
+                      {property.name}
+                    </Text>
+                    <Text style={[
+                      styles.propertyAddress,
+                      selectedProperty.id === property.id && styles.propertyAddressSelected
+                    ]}>
+                      {property.address}
+                    </Text>
+                    <Text style={[
+                      styles.propertyType,
+                      selectedProperty.id === property.id && styles.propertyTypeSelected
+                    ]}>
+                      {property.propertyType.charAt(0).toUpperCase() + property.propertyType.slice(1)} • {property.squareFootage.toLocaleString()} sq ft
+                    </Text>
                   </View>
-                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.maintenance)}]}>{currentScore.maintenance}</Text>
-                </View>
-                <View style={styles.scoreRow}>
-                  <Text style={styles.scoreCategory}>Landscaping</Text>
-                  <View style={styles.scoreBarContainer}>
-                    <View style={[styles.scoreBar, {width: `${currentScore.landscaping}%`, backgroundColor: getScoreColor(currentScore.landscaping)}]} />
-                  </View>
-                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.landscaping)}]}>{currentScore.landscaping}</Text>
-                </View>
-                <View style={styles.scoreRow}>
-                  <Text style={styles.scoreCategory}>Pest Control</Text>
-                  <View style={styles.scoreBarContainer}>
-                    <View style={[styles.scoreBar, {width: `${currentScore.security}%`, backgroundColor: getScoreColor(currentScore.security)}]} />
-                  </View>
-                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.security)}]}>{currentScore.security}</Text>
-                </View>
-                <View style={styles.scoreRow}>
-                  <Text style={styles.scoreCategory}>Janitorial</Text>
-                  <View style={styles.scoreBarContainer}>
-                    <View style={[styles.scoreBar, {width: `${currentScore.cleanliness}%`, backgroundColor: getScoreColor(currentScore.cleanliness)}]} />
-                  </View>
-                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.cleanliness)}]}>{currentScore.cleanliness}</Text>
-                </View>
-              </ScrollView>
-            </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
 
             {/* Current Property Score */}
             <View style={styles.scoreSection}>
@@ -570,6 +569,15 @@ const styles = StyleSheet.create({
   },
   propertyTypeSelected: {
     color: CommercialColors.systemBlue,
+  },
+  propertyCardContent: {
+    backgroundColor: CommercialColors.secondaryBackground,
+    padding: CommercialSpacing.lg,
+    borderWidth: 2,
+    borderColor: CommercialColors.separator,
+  },
+  propertyCardContentSelected: {
+    borderColor: CommercialColors.systemBlue,
   },
   scoreSection: {
     marginBottom: CommercialSpacing.xxl,
