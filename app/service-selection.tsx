@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: CommercialSpacing.lg,
     alignItems: 'center',
-    gap: CommercialSpacing.md,
+    gap: CommercialSpacing.sm,
   },
   serviceIconContainer: {
     width: 48,
@@ -474,8 +474,8 @@ const styles = StyleSheet.create({
     color: CommercialColors.systemBlueDark,
   },
   checkboxContainer: {
-    width: 24,
-    height: 24,
+    width: '47%',
+    height: 120,
     borderRadius: 12,
     borderWidth: 2,
     borderColor: CommercialColors.separator,

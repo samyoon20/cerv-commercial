@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { 
   View, 
   Text, 
-  StyleSheet, 
+  StyleSheet,
+  SafeAreaView, 
   ScrollView, 
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { ArrowLeft, DollarSign, Calendar, CircleCheck as CheckCircle, ChevronRight, Building2, Wrench, Paintbrush, Leaf, Shield, Zap, Droplets } from 'lucide-react-native';
 import { CommercialColors, CommercialTypography, CommercialBorderRadius, CommercialSpacing } from '@/themes/commercialDesignSystem';
 
@@ -105,73 +105,30 @@ const SIZE_MULTIPLIERS = {
 };
 
 export default function InstantQuoteScreen() {
-  const { propertyType, squareFootage, serviceIds } = useLocalSearchParams();
-  const [selectedFrequencies, setSelectedFrequencies] = useState<{[key: string]: string}>({});
-  const [isCalculating, setIsCalculating] = useState(false);
-  const [quoteReady, setQuoteReady] = useState(false);
-  const [quoteTotal, setQuoteTotal] = useState(0);
-  const [monthlyTotal, setMonthlyTotal] = useState(0);
-  const [annualTotal, setAnnualTotal] = useState(0);
-  const [savings, setSavings] = useState(0);
-
-  const selectedServiceIds = (serviceIds as string).split(',');
-  const selectedServices = selectedServiceIds.map(id => COMMERCIAL_SERVICES[id as keyof typeof COMMERCIAL_SERVICES]);
-
-  const getSizeCategory = (size: number) => {
-    if (size < 10000) return 'small';
-    if (size < 50000) return 'medium';
-    if (size < 100000) return 'large';
-    return 'xlarge';
+  // Hardcoded values for the instant quote demo
+  const propertyType = 'office';
+  const squareFootage = 150000;
+  const [quoteReady] = useState(true);
+  const [monthlyTotal] = useState(2450);
+  const [annualTotal] = useState(29400);
+  const [savings] = useState(3600);
+  
+  // Selected services for the demo
+  const selectedServices = [
+    COMMERCIAL_SERVICES['pest'],
+    COMMERCIAL_SERVICES['pool'],
+    COMMERCIAL_SERVICES['landscape']
+  ];
+  
+  // Hardcoded frequencies
+  const selectedFrequencies = {
+    'pest': 'monthly',
+    'pool': 'weekly',
+    'landscape': 'bi-weekly'
   };
 
   const handleBack = () => {
     router.back();
-  };
-
-  const handleFrequencyChange = (serviceId: string, frequency: string) => {
-    setSelectedFrequencies({
-      ...selectedFrequencies,
-      [serviceId]: frequency
-    });
-  };
-
-  const calculateQuote = () => {
-    setIsCalculating(true);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      const sizeCategory = getSizeCategory(Number(squareFootage));
-      const sizeMultiplier = SIZE_MULTIPLIERS[sizeCategory as keyof typeof SIZE_MULTIPLIERS];
-      
-      let total = 0;
-      let standardTotal = 0;
-      
-      selectedServices.forEach(service => {
-        const frequency = selectedFrequencies[service.id] || service.frequency[0];
-        const frequencyMultiplier = FREQUENCY_DISCOUNTS[frequency as keyof typeof FREQUENCY_DISCOUNTS];
-        
-        const servicePrice = service.basePrice * sizeMultiplier * frequencyMultiplier;
-        total += servicePrice;
-        
-        // Calculate standard price without discounts
-        const standardPrice = service.basePrice * sizeMultiplier;
-        standardTotal += standardPrice;
-      });
-      
-      // Apply bundle discount if multiple services selected
-      if (selectedServices.length > 1) {
-        const bundleDiscount = 0.05 * (selectedServices.length - 1); // 5% per additional service
-        total = total * (1 - bundleDiscount);
-      }
-      
-      setQuoteTotal(Math.round(total));
-      setMonthlyTotal(Math.round(total));
-      setAnnualTotal(Math.round(total * 12));
-      setSavings(Math.round(standardTotal - total));
-      
-      setQuoteReady(true);
-      setIsCalculating(false);
-    }, 2000);
   };
 
   const handleContinue = () => {
@@ -180,17 +137,13 @@ export default function InstantQuoteScreen() {
       params: {
         propertyType,
         squareFootage,
-        serviceIds,
+        serviceIds: 'pest,pool,landscape',
         frequencies: JSON.stringify(selectedFrequencies),
         monthlyTotal,
         annualTotal
       }
     });
   };
-
-  const allFrequenciesSelected = selectedServices.every(service => 
-    selectedFrequencies[service.id]
-  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -221,7 +174,7 @@ export default function InstantQuoteScreen() {
             <View style={styles.propertyDetails}>
               <Text style={styles.propertyInfoTitle}>Property Details</Text>
               <Text style={styles.propertyInfoText}>
-                {String(propertyType).replace('_', ' ').charAt(0).toUpperCase() + String(propertyType).replace('_', ' ').slice(1)} • {Number(squareFootage).toLocaleString()} sq ft
+                Office • 150,000 sq ft
               </Text>
             </View>
           </View>
@@ -230,12 +183,12 @@ export default function InstantQuoteScreen() {
             <Text style={styles.sectionTitle}>Selected Services</Text>
             <Text style={styles.sectionSubtitle}>Choose frequency for each service</Text>
             
-            {selectedServices.map(service => {
+            {selectedServices.map((service, index) => {
               const ServiceIcon = service.icon;
               const selectedFrequency = selectedFrequencies[service.id];
               
               return (
-                <View key={service.id} style={styles.serviceCard}>
+                <View key={index} style={styles.serviceCard}>
                   <View style={styles.serviceCardContent}>
                     <View style={styles.serviceHeader}>
                       <View style={styles.serviceIconContainer}>
@@ -251,13 +204,12 @@ export default function InstantQuoteScreen() {
                       <Text style={styles.frequencyLabel}>Service Frequency:</Text>
                       <View style={styles.frequencyOptions}>
                         {service.frequency.map(freq => (
-                          <TouchableOpacity
+                          <View
                             key={freq}
                             style={[
                               styles.frequencyOption,
                               selectedFrequency === freq && styles.frequencyOptionSelected
                             ]}
-                            onPress={() => handleFrequencyChange(service.id, freq)}
                           >
                             <Text style={[
                               styles.frequencyText,
@@ -265,7 +217,7 @@ export default function InstantQuoteScreen() {
                             ]}>
                               {freq.charAt(0).toUpperCase() + freq.slice(1)}
                             </Text>
-                          </TouchableOpacity>
+                          </View>
                         ))}
                       </View>
                     </View>
@@ -281,25 +233,6 @@ export default function InstantQuoteScreen() {
               );
             })}
           </View>
-
-          {!quoteReady && (
-            <TouchableOpacity 
-              style={[styles.calculateButton, !allFrequenciesSelected && styles.disabledButton]}
-              onPress={calculateQuote}
-              disabled={!allFrequenciesSelected || isCalculating}
-            >
-              <View style={styles.calculateButtonBackground}>
-                {isCalculating ? (
-                  <ActivityIndicator color={CommercialColors.white} size="small" />
-                ) : (
-                  <>
-                    <DollarSign color={CommercialColors.white} size={20} />
-                    <Text style={styles.calculateButtonText}>Calculate Quote</Text>
-                  </>
-                )}
-              </View>
-            </TouchableOpacity>
-          )}
 
           {quoteReady && (
             <View style={styles.quoteResults}>

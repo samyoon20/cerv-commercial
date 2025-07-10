@@ -25,6 +25,7 @@ export default function TabLayout() {
         tabBarItemStyle: {
           paddingTop: 6,
         },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen
@@ -42,15 +43,6 @@ export default function TabLayout() {
           title: 'Reports',
           tabBarIcon: ({ size, color }) => (
             <FileText size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="chat"
-        options={{
-          title: 'Messages',
-          tabBarIcon: ({ size, color }) => (
-            <MessageCircle size={size} color={color} />
           ),
         }}
       />
