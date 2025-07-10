@@ -5,13 +5,12 @@ import { CommercialColors, CommercialTypography, CommercialBorderRadius, Commerc
 
 const COMMERCIAL_SERVICES = [
   {
-    id: 'waste',
-    name: 'Waste Services',
-    description: 'Complete waste management and recycling services',
-    icon: Leaf,
-    basePrice: 1800,
-    frequency: ['weekly', 'bi-weekly', 'monthly'],
-    recommended: true,
+    id: 'pest',
+    name: 'Pest Services',
+    description: 'Professional pest control and prevention services for commercial properties',
+    icon: Shield,
+    basePrice: 800,
+    frequency: ['monthly', 'quarterly', 'bi-annual'],
     available: true,
   },
   {
@@ -55,21 +54,11 @@ const COMMERCIAL_SERVICES = [
     available: true,
   },
   {
-    id: 'exterior',
-    name: 'Exterior Services',
-    description: 'Building exterior maintenance including pressure washing and surface care',
-    icon: Paintbrush,
-    basePrice: 2000,
-    frequency: ['monthly', 'quarterly', 'bi-annual'],
-    recommended: false,
-    available: true,
-  },
-  {
-    id: 'janitorial',
-    name: 'Exterior Services',
-    description: 'Professional commercial cleaning services for interior spaces',
-    icon: Paintbrush,
-    basePrice: 1000,
+    id: 'pest',
+    name: 'Pest Services',
+    description: 'Comprehensive pest control and prevention services for commercial properties',
+    icon: Shield,
+    basePrice: 300,
     frequency: ['monthly', 'quarterly'],
     recommended: false,
     available: true,
@@ -77,9 +66,39 @@ const COMMERCIAL_SERVICES = [
   {
     id: 'pool',
     name: 'Pool Services',
-    description: 'Complete pool maintenance, cleaning, and chemical balancing services',
+    description: 'Pool cleaning, maintenance, and chemical balancing for commercial pools',
     icon: Droplets,
+    basePrice: 400,
+    frequency: ['weekly', 'bi-weekly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'landscape',
+    name: 'Landscape Services',
+    description: 'Professional landscaping and grounds maintenance for commercial properties',
+    icon: Leaf,
     basePrice: 800,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'tree',
+    name: 'Tree Services',
+    description: 'Tree trimming, removal, and maintenance services',
+    icon: Leaf,
+    basePrice: 600,
+    frequency: ['quarterly', 'bi-annual'],
+    recommended: false,
+    available: true
+  },
+  {
+    id: 'pool',
+    name: 'Pool Services',
+    description: 'Complete pool maintenance including cleaning, chemical balancing, and equipment service',
+    icon: Droplets,
+    basePrice: 1200,
     frequency: ['weekly', 'bi-weekly', 'monthly'],
     recommended: true,
     available: true,
@@ -101,6 +120,26 @@ const COMMERCIAL_SERVICES = [
     icon: Leaf,
     basePrice: 1500,
     frequency: ['quarterly', 'bi-annual', 'annual'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'exterior',
+    name: 'Exterior Services',
+    description: 'Exterior cleaning, pressure washing, and building maintenance services',
+    icon: Paintbrush,
+    basePrice: 2000,
+    frequency: ['monthly', 'quarterly', 'bi-annual'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'janitorial',
+    name: 'Exterior Services',
+    description: 'Comprehensive interior cleaning services for commercial properties',
+    icon: Paintbrush,
+    basePrice: 1000,
+    frequency: ['monthly', 'quarterly'],
     recommended: false,
     available: true,
   },
@@ -140,11 +179,10 @@ export default function ServiceSelectionScreen() {
 
   // Get recommended services based on property type
   const getRecommendedServices = () => {
-    // In a real app, this would be more sophisticated based on property type, size, etc.
     if (propertyType === 'office') {
-      return ['pest', 'landscape', 'janitorial'];
+      return ['pest', 'janitorial', 'exterior'];
     } else if (propertyType === 'retail') {
-      return ['pest', 'exterior', 'janitorial'];
+      return ['pest', 'landscape', 'janitorial'];
     } else if (propertyType === 'warehouse') {
       return ['pest', 'exterior', 'waste'];
     } else {
