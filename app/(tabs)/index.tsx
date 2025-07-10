@@ -245,35 +245,35 @@ export default function DashboardTab() {
                       styles.propertyCard,
                       selectedProperty.id === property.id && styles.propertyCardSelected
                     ]}
-                  onPress={() => handlePropertySelect(property)}
-                >
-                  <View style={[
-                    styles.propertyCardContent,
-                    selectedProperty.id === property.id && styles.propertyCardContentSelected
-                  ]}>
-                    <Text style={[
-                      styles.propertyName,
-                      selectedProperty.id === property.id && styles.propertyNameSelected
+                    onPress={() => handlePropertySelect(property)}
+                  >
+                    <View style={[
+                      styles.propertyCardContent,
+                      selectedProperty.id === property.id && styles.propertyCardContentSelected
                     ]}>
-                      {property.name}
-                    </Text>
-                    <Text style={[
-                      styles.propertyAddress,
-                      selectedProperty.id === property.id && styles.propertyAddressSelected
-                    ]}>
-                      {property.address}
-                    </Text>
-                    <Text style={[
-                      styles.propertyType,
-                      selectedProperty.id === property.id && styles.propertyTypeSelected
-                    ]}>
-                      {property.propertyType.charAt(0).toUpperCase() + property.propertyType.slice(1)} • {property.squareFootage.toLocaleString()} sq ft
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
+                      <Text style={[
+                        styles.propertyName,
+                        selectedProperty.id === property.id && styles.propertyNameSelected
+                      ]}>
+                        {property.name}
+                      </Text>
+                      <Text style={[
+                        styles.propertyAddress,
+                        selectedProperty.id === property.id && styles.propertyAddressSelected
+                      ]}>
+                        {property.address}
+                      </Text>
+                      <Text style={[
+                        styles.propertyType,
+                        selectedProperty.id === property.id && styles.propertyTypeSelected
+                      ]}>
+                        {property.propertyType.charAt(0).toUpperCase() + property.propertyType.slice(1)} • {property.squareFootage.toLocaleString()} sq ft
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
 
             {/* Current Property Score */}
             <View style={styles.scoreSection}>
@@ -412,11 +412,7 @@ export default function DashboardTab() {
           </ScrollView>
         </SafeAreaView>
       </View>
-    )
-    )
-    }
     </View>
-  )
   );
 }
 
@@ -569,12 +565,6 @@ const styles = StyleSheet.create({
   },
   propertyTypeSelected: {
     color: CommercialColors.systemBlue,
-  },
-  propertyCardContent: {
-    backgroundColor: CommercialColors.secondaryBackground,
-    padding: CommercialSpacing.lg,
-    borderWidth: 2,
-    borderColor: CommercialColors.separator,
   },
   propertyCardContentSelected: {
     borderColor: CommercialColors.systemBlue,
