@@ -245,30 +245,34 @@ export default function DashboardTab() {
                       styles.propertyCard,
                       selectedProperty.id === property.id && styles.propertyCardSelected
                     ]}
-                    onPress={() => handlePropertySelect(property)}
-                  >
-                    <View style={styles.propertyCardContent}>
-                      <Text style={[
-                        styles.propertyName,
-                        selectedProperty.id === property.id && styles.propertyNameSelected
-                      ]}>
-                        {property.name}
-                      </Text>
-                      <Text style={[
-                        styles.propertyAddress,
-                        selectedProperty.id === property.id && styles.propertyAddressSelected
-                      ]}>
-                        {property.address}
-                      </Text>
-                      <Text style={[
-                        styles.propertyType,
-                        selectedProperty.id === property.id && styles.propertyTypeSelected
-                      ]}>
-                        {property.propertyType.charAt(0).toUpperCase() + property.propertyType.slice(1)} • {property.squareFootage.toLocaleString()} sq ft
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                <View style={styles.scoreRow}>
+                  <Text style={styles.scoreCategory}>Maintenance</Text>
+                  <View style={styles.scoreBarContainer}>
+                    <View style={[styles.scoreBar, {width: `${currentScore.maintenance}%`, backgroundColor: getScoreColor(currentScore.maintenance)}]} />
+                  </View>
+                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.maintenance)}]}>{currentScore.maintenance}</Text>
+                </View>
+                <View style={styles.scoreRow}>
+                  <Text style={styles.scoreCategory}>Landscaping</Text>
+                  <View style={styles.scoreBarContainer}>
+                    <View style={[styles.scoreBar, {width: `${currentScore.landscaping}%`, backgroundColor: getScoreColor(currentScore.landscaping)}]} />
+                  </View>
+                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.landscaping)}]}>{currentScore.landscaping}</Text>
+                </View>
+                <View style={styles.scoreRow}>
+                  <Text style={styles.scoreCategory}>Pest Control</Text>
+                  <View style={styles.scoreBarContainer}>
+                    <View style={[styles.scoreBar, {width: `${currentScore.security}%`, backgroundColor: getScoreColor(currentScore.security)}]} />
+                  </View>
+                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.security)}]}>{currentScore.security}</Text>
+                </View>
+                <View style={styles.scoreRow}>
+                  <Text style={styles.scoreCategory}>Janitorial</Text>
+                  <View style={styles.scoreBarContainer}>
+                    <View style={[styles.scoreBar, {width: `${currentScore.cleanliness}%`, backgroundColor: getScoreColor(currentScore.cleanliness)}]} />
+                  </View>
+                  <Text style={[styles.scoreCategoryValue, {color: getScoreColor(currentScore.cleanliness)}]}>{currentScore.cleanliness}</Text>
+                </View>
               </ScrollView>
             </View>
 
@@ -353,10 +357,10 @@ export default function DashboardTab() {
                 <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/(tabs)/chat')}>
                   <View style={styles.actionCardBackground}>
                     <View style={styles.actionIconContainer}>
-                      <MessageSquare color={CommercialColors.systemBlue} size={24} />
+                      <Building2 color={CommercialColors.systemBlue} size={24} />
                     </View>
-                    <Text style={styles.actionTitle}>Chat Support</Text>
-                    <Text style={styles.actionSubtitle}>Get help instantly</Text>
+                    <Text style={styles.actionTitle}>Property Details</Text>
+                    <Text style={styles.actionSubtitle}>View property info</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -611,16 +615,32 @@ const styles = StyleSheet.create({
   scoreRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center', 
+    marginBottom: CommercialSpacing.sm,
   },
   scoreCategory: {
     ...CommercialTypography.subheadline,
     color: CommercialColors.secondaryLabel,
+    width: 100,
   },
   scoreCategoryValue: {
     ...CommercialTypography.headline,
     color: CommercialColors.label,
     fontWeight: '600',
+    width: 30,
+    textAlign: 'right',
+  },
+  scoreBarContainer: {
+    flex: 1,
+    height: 8,
+    backgroundColor: CommercialColors.systemGray5,
+    borderRadius: 4,
+    marginHorizontal: CommercialSpacing.md,
+    overflow: 'hidden',
+  },
+  scoreBar: {
+    height: '100%',
+    borderRadius: 4,
   },
   quickActions: {
     marginBottom: CommercialSpacing.xxl,

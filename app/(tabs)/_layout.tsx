@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Building2, FileText, MessageCircle, User } from 'lucide-react-native';
+import { Building2, FileText, User } from 'lucide-react-native';
 import { CommercialColors, CommercialTypography } from '@/themes/commercialDesignSystem';
 
 export default function TabLayout() {
@@ -33,15 +33,6 @@ export default function TabLayout() {
           title: 'Dashboard',
           tabBarIcon: ({ size, color }) => (
             <Building2 size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="reports"
-        options={{
-          title: 'Reports', 
-          tabBarIcon: ({ size, color }) => (
-            <FileText size={size} color={color} />
           ),
         }}
       />
