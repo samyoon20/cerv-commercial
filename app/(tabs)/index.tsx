@@ -16,15 +16,15 @@ import type { CommercialProperty, CommercialPortfolio, CommercialCervScore, Comm
 const MOCK_PORTFOLIO: CommercialPortfolio = {
   id: 'portfolio-1',
   userId: 'user-1',
-  companyName: 'Metro Properties LLC',
+  companyName: 'Austin Commercial Properties',
   properties: [
     {
       id: 'prop-1',
-      name: 'Downtown Office Tower',
-      address: '123 Business Ave',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipCode: '90210',
+      name: 'Downtown Austin Office Complex',
+      address: '500 W 2nd Street',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78701',
       propertyType: 'office',
       squareFootage: 150000,
       floors: 25,
@@ -34,11 +34,11 @@ const MOCK_PORTFOLIO: CommercialPortfolio = {
     },
     {
       id: 'prop-2',
-      name: 'Westside Retail Center',
-      address: '456 Commerce St',
-      city: 'Santa Monica',
-      state: 'CA',
-      zipCode: '90401',
+      name: 'South Austin Retail Plaza',
+      address: '1200 S Lamar Blvd',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
       propertyType: 'retail',
       squareFootage: 75000,
       floors: 2,
@@ -48,11 +48,11 @@ const MOCK_PORTFOLIO: CommercialPortfolio = {
     },
     {
       id: 'prop-3',
-      name: 'Industrial Park Unit A',
-      address: '789 Industrial Blvd',
-      city: 'Carson',
-      state: 'CA',
-      zipCode: '90745',
+      name: 'East Austin Industrial Center',
+      address: '3400 E 5th Street',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78702',
       propertyType: 'warehouse',
       squareFootage: 200000,
       floors: 1,
@@ -252,7 +252,7 @@ export default function DashboardTab() {
                           styles.propertyAddress,
                           isSelected && styles.propertyAddressSelected
                         ]}>
-                          {property.city}, {property.state}
+                          {property.address}
                         </Text>
                         <View style={styles.propertyMeta}>
                           <Text style={[
@@ -305,9 +305,9 @@ export default function DashboardTab() {
               <View style={styles.scoreBreakdown}>
                 {[
                   { key: 'maintenance', label: 'Maintenance', value: currentScore.maintenance },
-                  { key: 'cleanliness', label: 'Cleanliness', value: currentScore.cleanliness },
+                  { key: 'cleanliness', label: 'Janitorial', value: currentScore.cleanliness },
                   { key: 'landscaping', label: 'Landscaping', value: currentScore.landscaping },
-                  { key: 'security', label: 'Security', value: currentScore.security },
+                  { key: 'pest', label: 'Pest Control', value: currentScore.security },
                 ].map((item) => (
                   <View key={item.key} style={styles.scoreItem}>
                     <Text style={styles.scoreItemLabel}>{item.label}</Text>
@@ -398,16 +398,16 @@ export default function DashboardTab() {
                   {
                     id: '1',
                     type: 'service',
-                    title: 'HVAC Maintenance Completed',
-                    property: 'Downtown Office Tower',
+                    title: 'Pool Service Completed',
+                    property: 'Downtown Austin Office Complex',
                     time: '2 hours ago',
                     icon: <Building2 color={CommercialColors.systemBlue} size={16} />,
                   },
                   {
                     id: '2',
                     type: 'issue',
-                    title: 'Lighting Issue Reported',
-                    property: 'Westside Retail Center',
+                    title: 'Pest Control Issue Reported',
+                    property: 'South Austin Retail Plaza',
                     time: '4 hours ago',
                     icon: <AlertTriangle color={CommercialColors.systemOrange} size={16} />,
                   },
