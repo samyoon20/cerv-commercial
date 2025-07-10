@@ -55,7 +55,15 @@
 @@ .. @@
                  <View style={styles.categoryOptions}>
                    {['maintenance', 'cleaning', 'landscaping', 'security', 'other'].map((category) => (
+                   )
+                   )
+                   }
 +                  {['pest', 'janitorial', 'landscaping', 'pool', 'exterior', 'tree', 'waste', 'other'].map((category) => (
                      <TouchableOpacity
                        key={category}
                        style={[
+                       ]
+                       }
+)
+)
+}
