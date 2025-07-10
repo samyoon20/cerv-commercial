@@ -19,6 +19,7 @@ const COMMERCIAL_SERVICES = [
     icon: Shield,
     basePrice: 800,
     frequency: ['monthly', 'quarterly', 'bi-annual'],
+    recommended: true,
     available: true,
   },
   {
@@ -68,6 +69,16 @@ const COMMERCIAL_SERVICES = [
     icon: Paintbrush,
     basePrice: 1000,
     frequency: ['monthly', 'quarterly'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'waste',
+    name: 'Waste Services',
+    description: 'Waste management and recycling services',
+    icon: Wrench,
+    basePrice: 900,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
     recommended: false,
     available: true,
   },
@@ -125,7 +136,7 @@ export default function ServiceSelectionScreen() {
       <View style={styles.backgroundContainer}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <ArrowLeft color={CommercialColors.lightLabel} size={24} />
+            <ArrowLeft color={CommercialColors.label} size={24} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Select Services</Text>
           <View style={styles.placeholder} />
@@ -290,11 +301,11 @@ export default function ServiceSelectionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: CommercialColors.lightBackground,
+    backgroundColor: CommercialColors.background,
   },
   backgroundContainer: {
     flex: 1,
-    backgroundColor: CommercialColors.lightBackground,
+    backgroundColor: CommercialColors.background,
   },
   header: {
     flexDirection: 'row',
@@ -303,19 +314,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: CommercialSpacing.xxl,
     paddingVertical: CommercialSpacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: CommercialColors.lightSeparator,
+    borderBottomColor: CommercialColors.separator,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
   },
   placeholder: {
     width: 40,
@@ -340,27 +351,27 @@ const styles = StyleSheet.create({
   },
   title: {
     ...CommercialTypography.title1,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     textAlign: 'center',
     marginBottom: CommercialSpacing.md,
   },
   subtitle: {
     ...CommercialTypography.body,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     textAlign: 'center',
     maxWidth: 320,
   },
   propertyInfo: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     borderRadius: CommercialBorderRadius.large,
     padding: CommercialSpacing.lg,
     marginBottom: CommercialSpacing.xxl,
     borderWidth: 1,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   propertyInfoTitle: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     marginBottom: CommercialSpacing.sm,
   },
   propertyInfoContent: {
@@ -368,11 +379,11 @@ const styles = StyleSheet.create({
   },
   propertyInfoText: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
   },
   propertyInfoLabel: {
     fontWeight: '600',
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
   },
   recommendedSection: {
     marginBottom: CommercialSpacing.xxl,
@@ -382,20 +393,20 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     ...CommercialTypography.title3,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     marginBottom: CommercialSpacing.xs,
   },
   sectionSubtitle: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     marginBottom: CommercialSpacing.lg,
   },
   serviceCard: {
     borderRadius: CommercialBorderRadius.large,
     marginBottom: CommercialSpacing.md,
     borderWidth: 2,
-    borderColor: CommercialColors.lightSeparator,
-    backgroundColor: CommercialColors.lightBackground,
+    borderColor: CommercialColors.separator,
+    backgroundColor: CommercialColors.cardBackground,
     overflow: 'hidden',
   },
   serviceCardSelected: {
@@ -430,7 +441,7 @@ const styles = StyleSheet.create({
   },
   serviceName: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
   },
   serviceNameSelected: {
     color: CommercialColors.systemBlueDark,
@@ -448,7 +459,7 @@ const styles = StyleSheet.create({
   },
   serviceDescription: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     marginBottom: 4,
   },
   serviceDescriptionSelected: {
@@ -467,7 +478,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -476,16 +487,16 @@ const styles = StyleSheet.create({
     borderColor: CommercialColors.systemBlue,
   },
   infoCard: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     borderRadius: CommercialBorderRadius.large,
     padding: CommercialSpacing.xl,
     marginBottom: CommercialSpacing.xxl,
     borderWidth: 1,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   infoTitle: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     marginBottom: CommercialSpacing.md,
   },
   infoRow: {
@@ -496,7 +507,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     flex: 1,
   },
   bottomSpacing: {
@@ -506,7 +517,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: CommercialSpacing.xxl,
     paddingVertical: CommercialSpacing.xxl,
     borderTopWidth: 1,
-    borderTopColor: CommercialColors.lightSeparator,
+    borderTopColor: CommercialColors.separator,
   },
   continueButton: {
     borderRadius: CommercialBorderRadius.large,

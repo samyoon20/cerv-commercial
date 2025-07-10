@@ -416,11 +416,11 @@ export default function DashboardTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: CommercialColors.lightBackground,
+    backgroundColor: CommercialColors.background,
   },
   backgroundView: {
     flex: 1,
-    backgroundColor: CommercialColors.lightBackground,
+    backgroundColor: CommercialColors.background,
   },
   safeArea: {
     flex: 1,
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: CommercialSpacing.xxl,
     paddingVertical: CommercialSpacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: CommercialColors.lightSeparator,
+    borderBottomColor: CommercialColors.separator,
   },
   brandSection: {
     flex: 1,
@@ -445,12 +445,12 @@ const styles = StyleSheet.create({
   },
   logoText: {
     ...CommercialTypography.title3,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     fontWeight: '700',
   },
   welcomeText: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
   },
   headerActions: {
     flexDirection: 'row',
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     ...CommercialTypography.title3,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     marginBottom: CommercialSpacing.lg,
   },
   portfolioStats: {
@@ -498,10 +498,10 @@ const styles = StyleSheet.create({
     ...CommercialShadows.small,
   },
   statCardBackground: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     padding: CommercialSpacing.lg,
     borderWidth: 1,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   statHeader: {
     flexDirection: 'row',
@@ -511,12 +511,12 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...CommercialTypography.title2,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     fontWeight: '700',
   },
   statLabel: {
     ...CommercialTypography.caption1,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
   },
   propertySelector: {
     marginBottom: CommercialSpacing.xxl,
@@ -535,14 +535,14 @@ const styles = StyleSheet.create({
     ...CommercialShadows.medium,
   },
   propertyCardContent: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     padding: CommercialSpacing.lg,
     borderWidth: 2,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   propertyName: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     marginBottom: CommercialSpacing.xs,
   },
   propertyNameSelected: {
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
   },
   propertyAddress: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     marginBottom: CommercialSpacing.xs,
   },
   propertyAddressSelected: {
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
   },
   propertyType: {
     ...CommercialTypography.caption1,
-    color: CommercialColors.lightTertiaryLabel,
+    color: CommercialColors.tertiaryLabel,
   },
   propertyTypeSelected: {
     color: CommercialColors.systemBlue,
@@ -572,10 +572,10 @@ const styles = StyleSheet.create({
     ...CommercialShadows.medium,
   },
   scoreCardBackground: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     padding: CommercialSpacing.xl,
     borderWidth: 1,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   scoreHeader: {
     alignItems: 'center',
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
   },
   scoreValue: {
     ...CommercialTypography.largeTitle,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     fontWeight: '700',
   },
   scoreTrend: {
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   },
   scoreLabel: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
   },
   scoreBreakdown: {
     gap: CommercialSpacing.sm,
@@ -615,11 +615,11 @@ const styles = StyleSheet.create({
   },
   scoreCategory: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
   },
   scoreCategoryValue: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     fontWeight: '600',
   },
   quickActions: {
@@ -637,11 +637,11 @@ const styles = StyleSheet.create({
     ...CommercialShadows.small,
   },
   actionCardBackground: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     padding: CommercialSpacing.lg,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   actionIconContainer: {
     width: 48,
@@ -654,13 +654,13 @@ const styles = StyleSheet.create({
   },
   actionTitle: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     textAlign: 'center',
     marginBottom: CommercialSpacing.xs,
   },
   actionSubtitle: {
     ...CommercialTypography.caption1,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     textAlign: 'center',
   },
   recentActivity: {
@@ -674,13 +674,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   activityItemBackground: {
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     flexDirection: 'row',
     alignItems: 'center',
     padding: CommercialSpacing.lg,
     gap: CommercialSpacing.md,
     borderWidth: 1,
-    borderColor: CommercialColors.lightSeparator,
+    borderColor: CommercialColors.separator,
   },
   activityIcon: {
     width: 32,
@@ -695,11 +695,11 @@ const styles = StyleSheet.create({
   },
   activityTitle: {
     ...CommercialTypography.subheadline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     marginBottom: 2,
   },
   activitySubtitle: {
     ...CommercialTypography.caption1,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
   },
 });

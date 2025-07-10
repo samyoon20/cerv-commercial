@@ -8,7 +8,7 @@ export const CommercialColors = {
   // Dark Theme for Main App (Apple-inspired)
   background: '#000000',
   secondaryBackground: '#1C1C1E',
-  tertiaryBackground: '#2C2C2E',
+  tertiaryBackground: '#2C2C2E', 
   groupedBackground: '#000000',
   
   // Card/Surface Colors

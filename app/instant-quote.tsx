@@ -37,12 +37,12 @@ const COMMERCIAL_SERVICES = {
     basePrice: 1800,
     frequency: ['weekly', 'bi-weekly', 'monthly'],
   },
-  'landscape': {
-    id: 'landscape',
-    name: 'Landscape Services',
-    description: 'Tree trimming, pruning, removal, and arborist services',
-    icon: Leaf,
-    basePrice: 1200,
+  'pest': {
+    id: 'pest',
+    name: 'Pest Services',
+    description: 'Professional pest control and prevention services for commercial properties',
+    icon: Shield,
+    basePrice: 800,
     frequency: ['quarterly', 'bi-annual'],
   },
   'tree': {
@@ -53,13 +53,21 @@ const COMMERCIAL_SERVICES = {
     basePrice: 1500,
     frequency: ['quarterly', 'bi-annual', 'annual'],
   },
+  'tree': {
+    id: 'tree',
+    name: 'Tree Services',
+    description: 'Tree trimming, pruning, removal, and arborist services',
+    icon: Leaf,
+    basePrice: 1200,
+    frequency: ['monthly', 'quarterly', 'bi-annual'],
+  },
   'exterior': {
     id: 'exterior',
     name: 'Exterior Services',
     description: 'Exterior cleaning, pressure washing, and building maintenance',
     icon: Paintbrush,
     basePrice: 2000,
-    frequency: ['monthly', 'quarterly', 'bi-annual'],
+    frequency: ['weekly', 'bi-weekly'],
   },
   'janitorial': {
     id: 'janitorial',
@@ -371,11 +379,11 @@ export default function InstantQuoteScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: CommercialColors.lightBackground,
+    backgroundColor: CommercialColors.background,
   },
   backgroundContainer: {
     flex: 1,
-    backgroundColor: CommercialColors.lightBackground,
+    backgroundColor: CommercialColors.background,
   },
   header: {
     flexDirection: 'row',
@@ -384,19 +392,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: CommercialSpacing.xxl,
     paddingVertical: CommercialSpacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: CommercialColors.lightSeparator,
+    borderBottomColor: CommercialColors.separator,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: CommercialColors.lightSecondaryBackground,
+    backgroundColor: CommercialColors.secondaryBackground,
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     ...CommercialTypography.headline,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
   },
   placeholder: {
     width: 40,
@@ -421,13 +429,13 @@ const styles = StyleSheet.create({
   },
   title: {
     ...CommercialTypography.title1,
-    color: CommercialColors.lightLabel,
+    color: CommercialColors.label,
     textAlign: 'center',
     marginBottom: CommercialSpacing.md,
   },
   subtitle: {
     ...CommercialTypography.body,
-    color: CommercialColors.lightSecondaryLabel,
+    color: CommercialColors.secondaryLabel,
     textAlign: 'center',
     maxWidth: 320,
   },
