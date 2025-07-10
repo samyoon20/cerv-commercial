@@ -8,7 +8,7 @@ import {
   SafeAreaView 
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Wrench, Shield, Leaf, Droplets, Paintbrush, CheckCircle, ChevronRight } from 'lucide-react-native';
+import { ArrowLeft, Wrench, Shield, Leaf, Droplets, Paintbrush, CircleCheck as CheckCircle, ChevronRight } from 'lucide-react-native';
 import { CommercialColors, CommercialTypography, CommercialBorderRadius, CommercialSpacing } from '@/themes/commercialDesignSystem';
 
 const COMMERCIAL_SERVICES = [
