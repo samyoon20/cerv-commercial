@@ -268,6 +268,13 @@ const COMMON_SERVICES = [
   const handleAddPhoto = () => {
     // Add a hardcoded photo instead of creating an error
     const hardcodedPhoto = 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+    
+    if (photos.length < 5) {
+      setPhotos([...photos, hardcodedPhoto]);
+    } else {
+      Alert.alert('Maximum Photos', 'You can add up to 5 photos per request.');
+    }
+  };
 
   const handleRemovePhoto = (index: number) => {
     const newPhotos = [...photos];
@@ -315,7 +322,7 @@ const COMMON_SERVICES = [
         ]
       );
     } catch (error) {
-      setPhotos([...photos, hardcodedPhoto]);
+      Alert.alert('Error', 'Failed to submit request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

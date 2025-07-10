@@ -4,12 +4,12 @@ import { CommercialColors, CommercialTypography, CommercialBorderRadius, Commerc
 
 const COMMERCIAL_SERVICES = [
   {
-    id: 'waste',
-    <boltArtifact id="enhanced-interactions" title="Enhanced App Interactions and Click-throughs">
-    icon: Leaf,
-    basePrice: 1800,
-    frequency: ['weekly', 'bi-weekly', 'monthly'],
-    recommended: true,
+    id: 'pest',
+    name: 'Pest Services',
+    description: 'Professional pest control and prevention services for commercial properties',
+    icon: Shield,
+    basePrice: 800,
+    frequency: ['monthly', 'quarterly', 'bi-annual'],
     available: true,
   },
   {
@@ -90,21 +90,11 @@ const COMMERCIAL_SERVICES = [
     basePrice: 600,
     frequency: ['quarterly', 'bi-annual'],
     recommended: false,
-<boltArtifact id="enhanced-interactions" title="Enhanced App Interactions and Click-throughs">
-    name: 'Exterior Services',
-    description: 'Professional commercial cleaning services for interior spaces',
-    icon: Paintbrush,
-    basePrice: 1000,
-    frequency: ['monthly', 'quarterly'],
-    recommended: false,
-    available: true,
-  },
-  {
     id: 'pool',
     name: 'Pool Services',
-    description: 'Complete pool maintenance, cleaning, and chemical balancing services',
+    description: 'Complete pool maintenance including cleaning, chemical balancing, and equipment service',
     icon: Droplets,
-    basePrice: 800,
+    basePrice: 1200,
     frequency: ['weekly', 'bi-weekly', 'monthly'],
     recommended: true,
     available: true,
@@ -126,6 +116,26 @@ const COMMERCIAL_SERVICES = [
     icon: Leaf,
     basePrice: 1500,
     frequency: ['quarterly', 'bi-annual', 'annual'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'exterior',
+    name: 'Exterior Services',
+    description: 'Exterior cleaning, pressure washing, and building maintenance services',
+    icon: Paintbrush,
+    basePrice: 2000,
+    frequency: ['monthly', 'quarterly', 'bi-annual'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'janitorial',
+    name: 'Exterior Services',
+    description: 'Comprehensive interior cleaning services for commercial properties',
+    icon: Paintbrush,
+    basePrice: 1000,
+    frequency: ['monthly', 'quarterly'],
     recommended: false,
     available: true,
   },
@@ -165,11 +175,10 @@ export default function ServiceSelectionScreen() {
 
   // Get recommended services based on property type
   const getRecommendedServices = () => {
-    // In a real app, this would be more sophisticated based on property type, size, etc.
     if (propertyType === 'office') {
-      return ['pest', 'landscape', 'janitorial'];
+      return ['pest', 'janitorial', 'exterior'];
     } else if (propertyType === 'retail') {
-      return ['pest', 'exterior', 'janitorial'];
+      return ['pest', 'landscape', 'janitorial'];
     } else if (propertyType === 'warehouse') {
       return ['pest', 'exterior', 'waste'];
     } else {
