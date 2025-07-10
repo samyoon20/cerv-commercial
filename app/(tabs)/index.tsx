@@ -413,7 +413,11 @@ export default function DashboardTab() {
           </ScrollView>
         </SafeAreaView>
       </View>
+    )
+    )
+    }
     </View>
+  )
   );
 }
 
