@@ -69,7 +69,7 @@ export interface IssueReport {
   description: string;
   photos: string[];
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  category: 'maintenance' | 'cleaning' | 'landscaping' | 'security' | 'other';
+  category: 'pest' | 'pool' | 'landscaping' | 'tree' | 'exterior' | 'janitorial' | 'waste' | 'other';
   status: 'open' | 'in_progress' | 'pending_approval' | 'completed' | 'cancelled';
   estimatedCost?: number;
   actualCost?: number;
@@ -95,7 +95,7 @@ export interface WorkRequest {
   description: string;
   photos?: string[];
   priority: 'low' | 'medium' | 'high';
-  category: 'addition' | 'modification' | 'enhancement' | 'other';
+  category: 'pest' | 'pool' | 'landscaping' | 'tree' | 'exterior' | 'janitorial' | 'waste' | 'other';
   status: 'pending_quote' | 'pending_approval' | 'approved' | 'in_progress' | 'completed' | 'rejected';
   quote?: {
     id: string;
@@ -115,9 +115,9 @@ export interface WorkRequest {
 export interface CommercialCervScore {
   overall: number;
   maintenance: number;
-  cleanliness: number;
+  janitorial: number;
   landscaping: number;
-  security: number;
+  pest: number;
   efficiency: number;
   lastUpdated: string;
   propertyId: string;
@@ -130,9 +130,9 @@ export interface PortfolioCervScore {
   propertyScores: { [propertyId: string]: CommercialCervScore };
   averageByCategory: {
     maintenance: number;
-    cleanliness: number;
+    janitorial: number;
     landscaping: number;
-    security: number;
+    pest: number;
     efficiency: number;
   };
   topPerformingProperty: string;

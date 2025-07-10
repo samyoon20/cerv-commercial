@@ -22,15 +22,15 @@ const MOCK_ISSUE_HISTORY: IssueReport[] = [
     id: 'issue-1',
     propertyId: 'prop-1',
     reportedBy: 'user-1',
-    title: 'Broken HVAC Unit',
-    description: 'The HVAC unit on the 3rd floor is not functioning properly. Temperature is fluctuating significantly.',
+    title: 'Pest Control Issue',
+    description: 'Noticed increased pest activity in the office break room area. Need immediate pest control service.',
     photos: [
       'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
     priority: 'high',
-    category: 'maintenance',
+    category: 'other',
     status: 'in_progress',
-    estimatedCost: 1200,
+    estimatedCost: 400,
     assignedTo: 'tech-1',
     createdAt: '2024-01-15T10:30:00Z',
     updatedAt: '2024-01-15T14:45:00Z',
@@ -39,15 +39,15 @@ const MOCK_ISSUE_HISTORY: IssueReport[] = [
     id: 'issue-2',
     propertyId: 'prop-1',
     reportedBy: 'user-1',
-    title: 'Lobby Lighting Issues',
-    description: 'Several lights in the main lobby are flickering or completely out. This is creating a poor impression for visitors.',
+    title: 'Pool Equipment Malfunction',
+    description: 'Pool filtration system is not working properly. Water clarity is declining.',
     photos: [
       'https://images.pexels.com/photos/1036657/pexels-photo-1036657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
     priority: 'medium',
-    category: 'maintenance',
+    category: 'other',
     status: 'completed',
-    actualCost: 350,
+    actualCost: 250,
     assignedTo: 'tech-2',
     createdAt: '2024-01-10T09:15:00Z',
     updatedAt: '2024-01-12T16:30:00Z',
@@ -57,13 +57,13 @@ const MOCK_ISSUE_HISTORY: IssueReport[] = [
     id: 'issue-3',
     propertyId: 'prop-2',
     reportedBy: 'user-1',
-    title: 'Water Leak in Restroom',
-    description: 'There is a water leak in the men\'s restroom on the 2nd floor. Water is pooling near the sink area.',
+    title: 'Landscaping Maintenance Needed',
+    description: 'Front entrance landscaping needs attention. Several plants are dying and irrigation system needs repair.',
     photos: [
       'https://images.pexels.com/photos/5797999/pexels-photo-5797999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
     priority: 'high',
-    category: 'maintenance',
+    category: 'landscaping',
     status: 'open',
     createdAt: '2024-01-18T11:20:00Z',
     updatedAt: '2024-01-18T11:20:00Z',
@@ -290,7 +290,7 @@ export default function ReportIssueScreen() {
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Category</Text>
                   <View style={styles.categoryOptions}>
-                    {['maintenance', 'cleaning', 'landscaping', 'security', 'other'].map((category) => (
+                    {['pest', 'pool', 'landscaping', 'janitorial', 'other'].map((category) => (
                       <TouchableOpacity
                         key={category}
                         style={[
@@ -303,7 +303,10 @@ export default function ReportIssueScreen() {
                           styles.categoryText,
                           issueCategory === category && styles.categoryTextSelected
                         ]}>
-                          {category.charAt(0).toUpperCase() + category.slice(1)}
+                          {category === 'pest' ? 'Pest Control' : 
+                           category === 'pool' ? 'Pool Services' : 
+                           category === 'janitorial' ? 'Janitorial' :
+                           category.charAt(0).toUpperCase() + category.slice(1)}
                         </Text>
                       </TouchableOpacity>
                     ))}
