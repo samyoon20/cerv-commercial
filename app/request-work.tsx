@@ -147,6 +147,9 @@ export default function RequestWorkScreen() {
   const [showServiceOptions, setShowServiceOptions] = useState(false);
   const [description, setDescription] = useState('');
 
+  const currentService = getSelectedService();
+  const CurrentServiceIcon = currentService?.icon;
+
   const handleBack = () => {
     if (showServiceOptions) {
       setShowServiceOptions(false);
@@ -348,12 +351,12 @@ export default function RequestWorkScreen() {
               {/* Service Options */}
               <View style={styles.serviceDetailHeader}>
                 <View style={styles.serviceDetailIconContainer}>
-                  {getSelectedService()?.icon && (
-                    <getSelectedService()!.icon color={CommercialColors.white} size={32} />
+                  {CurrentServiceIcon && (
+                    <CurrentServiceIcon color={CommercialColors.white} size={32} />
                   )}
                 </View>
-                <Text style={styles.serviceDetailTitle}>{getSelectedService()?.name}</Text>
-                <Text style={styles.serviceDetailDescription}>{getSelectedService()?.description}</Text>
+                <Text style={styles.serviceDetailTitle}>{currentService?.name}</Text>
+                <Text style={styles.serviceDetailDescription}>{currentService?.description}</Text>
               </View>
 
               <View style={styles.serviceOptionsSection}>
@@ -361,7 +364,7 @@ export default function RequestWorkScreen() {
                 <Text style={styles.sectionSubtitle}>Choose the specific service you need</Text>
                 
                 <View style={styles.serviceOptionsList}>
-                  {getSelectedService()?.options.map((option) => (
+                  {currentService?.options.map((option) => (
                     <TouchableOpacity
                       key={option.id}
                       style={[
