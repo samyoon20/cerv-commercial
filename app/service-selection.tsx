@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { 
-} from '@/themes/commercialDesignSystem';
+  View, 
+  Text, 
+  StyleSheet, 
+  ScrollView, 
+  TouchableOpacity,
+  SafeAreaView 
+} from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { ArrowLeft, Wrench, Shield, Leaf, Droplets, Paintbrush, CheckCircle, ChevronRight } from 'lucide-react-native';
 import { CommercialColors, CommercialTypography, CommercialBorderRadius, CommercialSpacing } from '@/themes/commercialDesignSystem';
 
 const COMMERCIAL_SERVICES = [
@@ -44,86 +52,6 @@ const COMMERCIAL_SERVICES = [
     available: true,
   },
   {
-    id: 'tree',
-    name: 'Tree Services',
-    description: 'Expert tree care including pruning, trimming, and health assessments',
-    icon: Leaf,
-    basePrice: 1500,
-    frequency: ['quarterly', 'bi-annual', 'annual'],
-    recommended: false,
-    available: true,
-  },
-  {
-    id: 'pest',
-    name: 'Pest Services',
-    description: 'Comprehensive pest control and prevention services for commercial properties',
-    icon: Shield,
-    basePrice: 300,
-    frequency: ['monthly', 'quarterly'],
-    recommended: false,
-    available: true,
-  },
-  {
-    id: 'pool',
-    name: 'Pool Services',
-    description: 'Pool cleaning, maintenance, and chemical balancing for commercial pools',
-    icon: Droplets,
-    basePrice: 400,
-    frequency: ['weekly', 'bi-weekly'],
-    recommended: true,
-    available: true,
-  },
-  {
-    id: 'landscape',
-    name: 'Landscape Services',
-    description: 'Professional landscaping and grounds maintenance for commercial properties',
-    icon: Leaf,
-    basePrice: 800,
-    frequency: ['weekly', 'bi-weekly', 'monthly'],
-    recommended: true,
-    available: true,
-  },
-  {
-    id: 'tree',
-    name: 'Tree Services',
-    description: 'Tree trimming, removal, and maintenance services',
-    icon: Leaf,
-    basePrice: 600,
-    frequency: ['quarterly', 'bi-annual'],
-    recommended: false,
-    available: true
-  },
-  {
-    id: 'pool',
-    name: 'Pool Services',
-    description: 'Complete pool maintenance including cleaning, chemical balancing, and equipment service',
-    icon: Droplets,
-    basePrice: 1200,
-    frequency: ['weekly', 'bi-weekly', 'monthly'],
-    recommended: true,
-    available: true,
-  },
-  {
-    id: 'landscape',
-    name: 'Landscape Services',
-    description: 'Professional landscaping services to maintain exterior grounds and enhance curb appeal',
-    icon: Leaf,
-    basePrice: 1800,
-    frequency: ['weekly', 'bi-weekly', 'monthly'],
-    recommended: true,
-    available: true,
-  },
-  {
-    id: 'tree',
-    name: 'Tree Services',
-    description: 'Tree trimming, pruning, and maintenance services for commercial properties',
-    icon: Leaf,
-    basePrice: 1500,
-    frequency: ['quarterly', 'bi-annual', 'annual'],
-    recommended: false,
-    available: true,
-  },
-  {
     id: 'exterior',
     name: 'Exterior Services',
     description: 'Exterior cleaning, pressure washing, and building maintenance services',
@@ -135,7 +63,7 @@ const COMMERCIAL_SERVICES = [
   },
   {
     id: 'janitorial',
-    name: 'Exterior Services',
+    name: 'Janitorial Services',
     description: 'Comprehensive interior cleaning services for commercial properties',
     icon: Paintbrush,
     basePrice: 1000,

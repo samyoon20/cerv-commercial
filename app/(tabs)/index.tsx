@@ -237,6 +237,469 @@ export default function DashboardTab() {
             {/* Property Selector */}
             <View style={styles.propertySelector}>
               <Text style={styles.sectionTitle}>Select Property</Text>
-              <Scroll
-  )
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.propertyScrollView}>
+                {MOCK_PORTFOLIO.properties.map((property) => (
+                  <TouchableOpacity
+                    key={property.id}
+                    style={[
+                      styles.propertyCard,
+                      selectedProperty.id === property.id && styles.propertyCardSelected
+                    ]}
+                    onPress={() => handlePropertySelect(property)}
+                  >
+                    <View style={styles.propertyCardContent}>
+                      <Text style={[
+                        styles.propertyName,
+                        selectedProperty.id === property.id && styles.propertyNameSelected
+                      ]}>
+                        {property.name}
+                      </Text>
+                      <Text style={[
+                        styles.propertyAddress,
+                        selectedProperty.id === property.id && styles.propertyAddressSelected
+                      ]}>
+                        {property.address}
+                      </Text>
+                      <Text style={[
+                        styles.propertyType,
+                        selectedProperty.id === property.id && styles.propertyTypeSelected
+                      ]}>
+                        {property.propertyType.charAt(0).toUpperCase() + property.propertyType.slice(1)} • {property.squareFootage.toLocaleString()} sq ft
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+
+            {/* Current Property Score */}
+            <View style={styles.scoreSection}>
+              <Text style={styles.sectionTitle}>Current Property Score</Text>
+              <View style={styles.scoreCard}>
+                <View style={styles.scoreCardBackground}>
+                  <View style={styles.scoreHeader}>
+                    <View style={styles.scoreMainInfo}>
+                      <Text style={styles.scoreValue}>{currentScore.overall}</Text>
+                      <View style={styles.scoreTrend}>
+                        {getTrendIcon(currentScore.trend)}
+                        <Text style={[styles.scoreTrendText, { color: getScoreColor(currentScore.overall) }]}>
+                          {currentScore.monthlyDelta > 0 ? '+' : ''}{currentScore.monthlyDelta}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text style={styles.scoreLabel}>Overall Score</Text>
+                  </View>
+                  
+                  <View style={styles.scoreBreakdown}>
+                    <View style={styles.scoreRow}>
+                      <Text style={styles.scoreCategory}>Maintenance</Text>
+                      <Text style={styles.scoreCategoryValue}>{currentScore.maintenance}</Text>
+                    </View>
+                    <View style={styles.scoreRow}>
+                      <Text style={styles.scoreCategory}>Cleanliness</Text>
+                      <Text style={styles.scoreCategoryValue}>{currentScore.cleanliness}</Text>
+                    </View>
+                    <View style={styles.scoreRow}>
+                      <Text style={styles.scoreCategory}>Landscaping</Text>
+                      <Text style={styles.scoreCategoryValue}>{currentScore.landscaping}</Text>
+                    </View>
+                    <View style={styles.scoreRow}>
+                      <Text style={styles.scoreCategory}>Security</Text>
+                      <Text style={styles.scoreCategoryValue}>{currentScore.security}</Text>
+                    </View>
+                    <View style={styles.scoreRow}>
+                      <Text style={styles.scoreCategory}>Efficiency</Text>
+                      <Text style={styles.scoreCategoryValue}>{currentScore.efficiency}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Quick Actions */}
+            <View style={styles.quickActions}>
+              <Text style={styles.sectionTitle}>Quick Actions</Text>
+              <View style={styles.actionGrid}>
+                <TouchableOpacity style={styles.actionCard} onPress={handleReportIssue}>
+                  <View style={styles.actionCardBackground}>
+                    <View style={styles.actionIconContainer}>
+                      <AlertTriangle color={CommercialColors.systemRed} size={24} />
+                    </View>
+                    <Text style={styles.actionTitle}>Report Issue</Text>
+                    <Text style={styles.actionSubtitle}>Submit maintenance requests</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.actionCard} onPress={handleRequestWork}>
+                  <View style={styles.actionCardBackground}>
+                    <View style={styles.actionIconContainer}>
+                      <Plus color={CommercialColors.systemBlue} size={24} />
+                    </View>
+                    <Text style={styles.actionTitle}>Request Work</Text>
+                    <Text style={styles.actionSubtitle}>Schedule services</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/(tabs)/reports')}>
+                  <View style={styles.actionCardBackground}>
+                    <View style={styles.actionIconContainer}>
+                      <TrendingUp color={CommercialColors.systemBlue} size={24} />
+                    </View>
+                    <Text style={styles.actionTitle}>View Reports</Text>
+                    <Text style={styles.actionSubtitle}>Analytics & insights</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/(tabs)/chat')}>
+                  <View style={styles.actionCardBackground}>
+                    <View style={styles.actionIconContainer}>
+                      <MessageSquare color={CommercialColors.systemBlue} size={24} />
+                    </View>
+                    <Text style={styles.actionTitle}>Chat Support</Text>
+                    <Text style={styles.actionSubtitle}>Get help instantly</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Recent Activity */}
+            <View style={styles.recentActivity}>
+              <Text style={styles.sectionTitle}>Recent Activity</Text>
+              <View style={styles.activityList}>
+                <View style={styles.activityItem}>
+                  <View style={styles.activityItemBackground}>
+                    <View style={styles.activityIcon}>
+                      <Calendar color={CommercialColors.systemBlue} size={16} />
+                    </View>
+                    <View style={styles.activityContent}>
+                      <Text style={styles.activityTitle}>Pool cleaning completed</Text>
+                      <Text style={styles.activitySubtitle}>South Austin Retail Center • 2 hours ago</Text>
+                    </View>
+                    <ChevronRight color={CommercialColors.tertiaryLabel} size={16} />
+                  </View>
+                </View>
+
+                <View style={styles.activityItem}>
+                  <View style={styles.activityItemBackground}>
+                    <View style={styles.activityIcon}>
+                      <Users color={CommercialColors.systemOrange} size={16} />
+                    </View>
+                    <View style={styles.activityContent}>
+                      <Text style={styles.activityTitle}>Pest control scheduled</Text>
+                      <Text style={styles.activitySubtitle}>Downtown Austin Office • Tomorrow 9:00 AM</Text>
+                    </View>
+                    <ChevronRight color={CommercialColors.tertiaryLabel} size={16} />
+                  </View>
+                </View>
+
+                <View style={styles.activityItem}>
+                  <View style={styles.activityItemBackground}>
+                    <View style={styles.activityIcon}>
+                      <Camera color={CommercialColors.systemBlue} size={16} />
+                    </View>
+                    <View style={styles.activityContent}>
+                      <Text style={styles.activityTitle}>Inspection photos uploaded</Text>
+                      <Text style={styles.activitySubtitle}>East Austin Industrial • Yesterday</Text>
+                    </View>
+                    <ChevronRight color={CommercialColors.tertiaryLabel} size={16} />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: CommercialColors.lightBackground,
+  },
+  backgroundView: {
+    flex: 1,
+    backgroundColor: CommercialColors.lightBackground,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: CommercialSpacing.xxl,
+    paddingVertical: CommercialSpacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: CommercialColors.lightSeparator,
+  },
+  brandSection: {
+    flex: 1,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: CommercialSpacing.sm,
+    marginBottom: CommercialSpacing.xs,
+  },
+  logoText: {
+    ...CommercialTypography.title3,
+    color: CommercialColors.lightLabel,
+    fontWeight: '700',
+  },
+  welcomeText: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.lightSecondaryLabel,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: CommercialSpacing.sm,
+  },
+  headerButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: CommercialColors.lightSecondaryBackground,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: CommercialColors.systemRed,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: CommercialSpacing.xxl,
+  },
+  portfolioOverview: {
+    marginTop: CommercialSpacing.xl,
+    marginBottom: CommercialSpacing.xxl,
+  },
+  sectionTitle: {
+    ...CommercialTypography.title3,
+    color: CommercialColors.lightLabel,
+    marginBottom: CommercialSpacing.lg,
+  },
+  portfolioStats: {
+    flexDirection: 'row',
+    gap: CommercialSpacing.md,
+  },
+  statCard: {
+    flex: 1,
+    borderRadius: CommercialBorderRadius.large,
+    overflow: 'hidden',
+    ...CommercialShadows.small,
+  },
+  statCardBackground: {
+    backgroundColor: CommercialColors.lightSecondaryBackground,
+    padding: CommercialSpacing.lg,
+    borderWidth: 1,
+    borderColor: CommercialColors.lightSeparator,
+  },
+  statHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: CommercialSpacing.xs,
+  },
+  statValue: {
+    ...CommercialTypography.title2,
+    color: CommercialColors.lightLabel,
+    fontWeight: '700',
+  },
+  statLabel: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.lightSecondaryLabel,
+  },
+  propertySelector: {
+    marginBottom: CommercialSpacing.xxl,
+  },
+  propertyScrollView: {
+    flexGrow: 0,
+  },
+  propertyCard: {
+    width: 280,
+    marginRight: CommercialSpacing.md,
+    borderRadius: CommercialBorderRadius.large,
+    overflow: 'hidden',
+    ...CommercialShadows.small,
+  },
+  propertyCardSelected: {
+    ...CommercialShadows.medium,
+  },
+  propertyCardContent: {
+    backgroundColor: CommercialColors.lightSecondaryBackground,
+    padding: CommercialSpacing.lg,
+    borderWidth: 2,
+    borderColor: CommercialColors.lightSeparator,
+  },
+  propertyName: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.lightLabel,
+    marginBottom: CommercialSpacing.xs,
+  },
+  propertyNameSelected: {
+    color: CommercialColors.systemBlue,
+  },
+  propertyAddress: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.lightSecondaryLabel,
+    marginBottom: CommercialSpacing.xs,
+  },
+  propertyAddressSelected: {
+    color: CommercialColors.systemBlueDark,
+  },
+  propertyType: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.lightTertiaryLabel,
+  },
+  propertyTypeSelected: {
+    color: CommercialColors.systemBlue,
+  },
+  scoreSection: {
+    marginBottom: CommercialSpacing.xxl,
+  },
+  scoreCard: {
+    borderRadius: CommercialBorderRadius.large,
+    overflow: 'hidden',
+    ...CommercialShadows.medium,
+  },
+  scoreCardBackground: {
+    backgroundColor: CommercialColors.lightSecondaryBackground,
+    padding: CommercialSpacing.xl,
+    borderWidth: 1,
+    borderColor: CommercialColors.lightSeparator,
+  },
+  scoreHeader: {
+    alignItems: 'center',
+    marginBottom: CommercialSpacing.lg,
+  },
+  scoreMainInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: CommercialSpacing.sm,
+    marginBottom: CommercialSpacing.xs,
+  },
+  scoreValue: {
+    ...CommercialTypography.largeTitle,
+    color: CommercialColors.lightLabel,
+    fontWeight: '700',
+  },
+  scoreTrend: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  scoreTrendText: {
+    ...CommercialTypography.caption1,
+    fontWeight: '600',
+  },
+  scoreLabel: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.lightSecondaryLabel,
+  },
+  scoreBreakdown: {
+    gap: CommercialSpacing.sm,
+  },
+  scoreRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  scoreCategory: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.lightSecondaryLabel,
+  },
+  scoreCategoryValue: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.lightLabel,
+    fontWeight: '600',
+  },
+  quickActions: {
+    marginBottom: CommercialSpacing.xxl,
+  },
+  actionGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: CommercialSpacing.md,
+  },
+  actionCard: {
+    width: '48%',
+    borderRadius: CommercialBorderRadius.large,
+    overflow: 'hidden',
+    ...CommercialShadows.small,
+  },
+  actionCardBackground: {
+    backgroundColor: CommercialColors.lightSecondaryBackground,
+    padding: CommercialSpacing.lg,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: CommercialColors.lightSeparator,
+  },
+  actionIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: CommercialColors.systemBlueLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: CommercialSpacing.md,
+  },
+  actionTitle: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.lightLabel,
+    textAlign: 'center',
+    marginBottom: CommercialSpacing.xs,
+  },
+  actionSubtitle: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.lightSecondaryLabel,
+    textAlign: 'center',
+  },
+  recentActivity: {
+    marginBottom: CommercialSpacing.xxxl,
+  },
+  activityList: {
+    gap: CommercialSpacing.sm,
+  },
+  activityItem: {
+    borderRadius: CommercialBorderRadius.medium,
+    overflow: 'hidden',
+  },
+  activityItemBackground: {
+    backgroundColor: CommercialColors.lightSecondaryBackground,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: CommercialSpacing.lg,
+    gap: CommercialSpacing.md,
+    borderWidth: 1,
+    borderColor: CommercialColors.lightSeparator,
+  },
+  activityIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: CommercialColors.systemBlueLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activityContent: {
+    flex: 1,
+  },
+  activityTitle: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.lightLabel,
+    marginBottom: 2,
+  },
+  activitySubtitle: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.lightSecondaryLabel,
+  },
+});
