@@ -1,0 +1,33 @@
+@@ .. @@
+     type: 'technician',
+     name: 'Mike Johnson',
+-    service: 'Pool Maintenance',
+-    lastMessage: 'I\'ll be there around 10 AM tomorrow for the pool cleaning.',
++    service: 'Pool Services',
++    lastMessage: 'I\'ll be there around 10 AM tomorrow for the pool maintenance.',
+     timestamp: '2 hours ago',
+@@ .. @@
+     type: 'technician',
+     name: 'Sarah Wilson',
+-    service: 'Landscaping',
++    service: 'Landscape Services',
+     lastMessage: 'Great! The garden is looking much better now.',
+     timestamp: '3 days ago',
+@@ .. @@
+     id: '1',
+     sender: 'technician',
+-    message: 'Hi! I\'m Mike, your pool maintenance technician.',
++    message: 'Hi! I\'m Mike, your pool services technician.',
+     timestamp: '10:00 AM',
+@@ .. @@
+     id: '2',
+     sender: 'user',
+-    message: 'Hi Mike! Looking forward to getting the pool cleaned.',
++    message: 'Hi Mike! Looking forward to getting the pool serviced.',
+     timestamp: '10:05 AM',
+@@ .. @@
+     id: '3',
+     sender: 'technician',
+-    message: 'Perfect! I\'ll be there around 10 AM tomorrow. Should take about an hour.',
++    message: 'Perfect! I\'ll be there around 10 AM tomorrow for the full service. Should take about an hour.',
+     timestamp: '10:07 AM',
