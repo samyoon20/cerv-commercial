@@ -149,6 +149,10 @@ export default function RequestWorkScreen() {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const getSelectedService = () => {
+    return SERVICES.find(s => s.id === selectedService);
+  };
+
   const currentService = getSelectedService();
   const CurrentServiceIcon = currentService?.icon;
 
@@ -218,10 +222,6 @@ export default function RequestWorkScreen() {
     }
 
     setShowServiceOptions(true);
-  };
-
-  const getSelectedService = () => {
-    return SERVICES.find(s => s.id === selectedService);
   };
 
   return (
