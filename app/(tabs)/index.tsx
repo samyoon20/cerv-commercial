@@ -226,7 +226,7 @@ export default function DashboardTab() {
                   <View style={styles.statCardBackground}>
                     <View style={styles.statHeader}>
                       <DollarSign color={CommercialColors.systemBlue} size={20} />
-                      <Text style={styles.statValue}>${(MOCK_PORTFOLIO.monthlySpend / 1000).toFixed(0)}K</Text>
+                      <Text style={[styles.statValue, styles.smallerStatValue]}>${(MOCK_PORTFOLIO.monthlySpend / 1000).toFixed(0)}K</Text>
                     </View>
                     <Text style={styles.statLabel}>Monthly</Text>
                   </View>
@@ -515,7 +515,10 @@ const styles = StyleSheet.create({
   statValue: {
     ...CommercialTypography.title2,
     color: CommercialColors.label,
-    fontWeight: '700',
+    fontWeight: '700'
+  },
+  smallerStatValue: {
+    fontSize: 20,
   },
   statLabel: {
     ...CommercialTypography.caption1,

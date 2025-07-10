@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { 
   View, 
   Text, 
-  StyleSheet, 
+  StyleSheet,
   ScrollView, 
   TouchableOpacity,
   TextInput,
-  Alert,
-  Image
+  Alert, 
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -146,6 +147,7 @@ export default function RequestWorkScreen() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showServiceOptions, setShowServiceOptions] = useState(false);
   const [description, setDescription] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentService = getSelectedService();
   const CurrentServiceIcon = currentService?.icon;
@@ -187,24 +189,31 @@ export default function RequestWorkScreen() {
     }
 
     if (showServiceOptions && selectedOption) {
-      // Simulate getting an instant quote
-      const selectedServiceObj = SERVICES.find(s => s.id === selectedService);
-      const selectedOptionObj = selectedServiceObj?.options.find(o => o.id === selectedOption);
+      setIsSubmitting(true);
       
-      Alert.alert(
-        'Instant Quote',
-        `Your quote for ${selectedOptionObj?.name} at ${selectedProperty.name} is ready!\n\nEstimated Price: ${selectedOptionObj?.price}\n\nWould you like to schedule this service?`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { 
-            text: 'Schedule Now', 
-            onPress: () => {
-              Alert.alert('Service Scheduled', 'Your service has been scheduled. You will receive a confirmation email shortly.');
-              router.push('/(tabs)');
+      // Simulate API call with a delay
+      setTimeout(() => {
+        setIsSubmitting(false);
+        
+        // Get selected service and option details
+        const selectedServiceObj = SERVICES.find(s => s.id === selectedService);
+        const selectedOptionObj = selectedServiceObj?.options.find(o => o.id === selectedOption);
+        
+        Alert.alert(
+          'Instant Quote',
+          `Your quote for ${selectedOptionObj?.name} at ${selectedProperty.name} is ready!\n\nEstimated Price: ${selectedOptionObj?.price}\n\nWould you like to schedule this service?`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { 
+              text: 'Schedule Now', 
+              onPress: () => {
+                Alert.alert('Service Scheduled', 'Your service has been scheduled. You will receive a confirmation email shortly.');
+                router.push('/(tabs)');
+              }
             }
-          }
-        ]
-      );
+          ]
+        );
+      }, 1000);
       return;
     }
 
@@ -458,16 +467,22 @@ export default function RequestWorkScreen() {
           <TouchableOpacity 
             style={[
               styles.continueButton,
-              (!selectedProperty || !selectedService || (showServiceOptions && !selectedOption)) && styles.disabledButton
+              (!selectedProperty || !selectedService || (showServiceOptions && !selectedOption) || isSubmitting) && styles.disabledButton
             ]} 
             onPress={handleContinue}
-            disabled={!selectedProperty || !selectedService || (showServiceOptions && !selectedOption)}
+            disabled={!selectedProperty || !selectedService || (showServiceOptions && !selectedOption) || isSubmitting}
           >
             <View style={styles.continueButtonBackground}>
-              <Text style={styles.continueButtonText}>
-                {showServiceOptions ? 'Get Instant Quote' : 'Continue'}
-              </Text>
-              <ChevronRight color={CommercialColors.white} size={20} />
+              {isSubmitting ? (
+                <ActivityIndicator color={CommercialColors.white} size="small" />
+              ) : (
+                <>
+                  <Text style={styles.continueButtonText}>
+                    {showServiceOptions ? 'Get Instant Quote' : 'Continue'}
+                  </Text>
+                  <ChevronRight color={CommercialColors.white} size={20} />
+                </>
+              )}
             </View>
           </TouchableOpacity>
         </View>
