@@ -1,42 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  TouchableOpacity,
-  Image
-} from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, CircleCheck as CheckCircle, ChevronRight, Wrench, Paintbrush, Leaf, Shield, Zap, Droplets } from 'lucide-react-native';
 import { CommercialColors, CommercialTypography, CommercialBorderRadius, CommercialSpacing } from '@/themes/commercialDesignSystem';
 
 const COMMERCIAL_SERVICES = [
   {
-    id: 'pest',
-    name: 'Pest Services',
-    description: 'Professional pest control and prevention services for commercial properties',
-    icon: Shield,
-    basePrice: 800,
-    frequency: ['monthly', 'quarterly'],
-    recommended: true,
-    available: true,
-  },
-  {
-    id: 'pool',
-    name: 'Pool Services',
-    description: 'Complete pool maintenance, cleaning, and chemical balancing services',
-    icon: Droplets,
-    basePrice: 600,
-    frequency: ['weekly', 'bi-weekly'],
-    recommended: true,
-    available: true,
-  },
-  {
-    id: 'landscape',
-    name: 'Landscape Services',
-    description: 'Professional landscaping maintenance, lawn care, and grounds keeping',
+    id: 'waste',
+    <boltArtifact id="enhanced-interactions" title="Enhanced App Interactions and Click-throughs">
     icon: Leaf,
     basePrice: 1800,
     frequency: ['weekly', 'bi-weekly', 'monthly'],
@@ -54,9 +23,76 @@ const COMMERCIAL_SERVICES = [
     available: true,
   },
   {
-    id: 'exterior',
+    id: 'pool',
+    name: 'Pool Services',
+    description: 'Complete pool maintenance, cleaning, and chemical balancing services',
+    icon: Droplets,
+    basePrice: 1200,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'landscape',
+    name: 'Landscape Services',
+    description: 'Professional landscaping maintenance including mowing, trimming, and seasonal care',
+    icon: Leaf,
+    basePrice: 1800,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'tree',
+    name: 'Tree Services',
+    description: 'Expert tree care including pruning, trimming, and health assessments',
+    icon: Leaf,
+    basePrice: 1500,
+    frequency: ['quarterly', 'bi-annual', 'annual'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'pest',
+    name: 'Pest Services',
+    description: 'Comprehensive pest control and prevention services for commercial properties',
+    icon: Shield,
+    basePrice: 300,
+    frequency: ['monthly', 'quarterly'],
+    recommended: false,
+    available: true,
+  },
+  {
+    id: 'pool',
+    name: 'Pool Services',
+    description: 'Pool cleaning, maintenance, and chemical balancing for commercial pools',
+    icon: Droplets,
+    basePrice: 400,
+    frequency: ['weekly', 'bi-weekly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'landscape',
+    name: 'Landscape Services',
+    description: 'Professional landscaping and grounds maintenance for commercial properties',
+    icon: Leaf,
+    basePrice: 800,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'tree',
+    name: 'Tree Services',
+    description: 'Tree trimming, removal, and maintenance services',
+    icon: Leaf,
+    basePrice: 600,
+    frequency: ['quarterly', 'bi-annual'],
+    recommended: false,
+<boltArtifact id="enhanced-interactions" title="Enhanced App Interactions and Click-throughs">
     name: 'Exterior Services',
-    description: 'Building exterior cleaning, pressure washing, and maintenance',
+    description: 'Professional commercial cleaning services for interior spaces',
     icon: Paintbrush,
     basePrice: 1000,
     frequency: ['monthly', 'quarterly'],
@@ -64,22 +100,32 @@ const COMMERCIAL_SERVICES = [
     available: true,
   },
   {
-    id: 'janitorial',
-    name: 'Janitorial Services',
-    description: 'Professional commercial cleaning and janitorial services',
-    icon: Paintbrush,
-    basePrice: 2500,
-    frequency: ['daily', 'weekly', 'bi-weekly'],
-    recommended: false,
+    id: 'pool',
+    name: 'Pool Services',
+    description: 'Complete pool maintenance, cleaning, and chemical balancing services',
+    icon: Droplets,
+    basePrice: 800,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
+    recommended: true,
     available: true,
   },
   {
-    id: 'waste',
-    name: 'Waste Services',
-    description: 'Commercial waste management and disposal services',
-    icon: Wrench,
-    basePrice: 400,
-    frequency: ['weekly', 'bi-weekly'],
+    id: 'landscape',
+    name: 'Landscape Services',
+    description: 'Professional landscaping services to maintain exterior grounds and enhance curb appeal',
+    icon: Leaf,
+    basePrice: 1800,
+    frequency: ['weekly', 'bi-weekly', 'monthly'],
+    recommended: true,
+    available: true,
+  },
+  {
+    id: 'tree',
+    name: 'Tree Services',
+    description: 'Tree trimming, pruning, and maintenance services for commercial properties',
+    icon: Leaf,
+    basePrice: 1500,
+    frequency: ['quarterly', 'bi-annual', 'annual'],
     recommended: false,
     available: true,
   },
@@ -121,9 +167,9 @@ export default function ServiceSelectionScreen() {
   const getRecommendedServices = () => {
     // In a real app, this would be more sophisticated based on property type, size, etc.
     if (propertyType === 'office') {
-      return ['pest', 'janitorial', 'exterior'];
+      return ['pest', 'landscape', 'janitorial'];
     } else if (propertyType === 'retail') {
-      return ['pest', 'janitorial', 'exterior'];
+      return ['pest', 'exterior', 'janitorial'];
     } else if (propertyType === 'warehouse') {
       return ['pest', 'exterior', 'waste'];
     } else {

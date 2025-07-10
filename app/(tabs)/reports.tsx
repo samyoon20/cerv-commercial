@@ -5,111 +5,212 @@ import {
   StyleSheet, 
   ScrollView, 
   TouchableOpacity,
-  Alert 
+  Alert,
+  Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FileText, Download, Calendar, TrendingUp, Building2, DollarSign, TriangleAlert as AlertTriangle, ChevronRight } from 'lucide-react-native';
+import { FileText, Download, Calendar, TrendingUp, Building2, DollarSign, TriangleAlert as AlertTriangle, ChevronRight, X } from 'lucide-react-native';
 import { CommercialColors, CommercialShadows, CommercialSpacing, CommercialTypography, CommercialBorderRadius } from '@/themes/commercialDesignSystem';
 import type { MonthlyReport } from '@/types/commercial';
 
-const MOCK_REPORTS: MonthlyReport[] = [
-  {
-    id: 'report-1',
-    portfolioId: 'portfolio-1',
-    month: '2024-01',
-    summary: {
-      totalVisits: 45,
-      completedServices: 42,
-      openIssues: 3,
-      totalSpend: 12500,
-      cervScoreChange: 3,
-    },
-    propertyBreakdown: {
-      'prop-1': {
-        visits: 18,
-        services: 17,
-        issues: 1,
-        spend: 5200,
-        cervScore: 87,
+const MOCK_REPORTS: { [key: string]: MonthlyReport[] } = {
+  monthly: [
+    {
+      id: 'report-1',
+      portfolioId: 'portfolio-1',
+      month: '2024-01',
+      summary: {
+        totalVisits: 45,
+        completedServices: 42,
+        openIssues: 3,
+        totalSpend: 12500,
+        cervScoreChange: 3,
       },
-      'prop-2': {
-        visits: 15,
-        services: 14,
-        issues: 1,
-        spend: 3800,
-        cervScore: 82,
+      propertyBreakdown: {
+        'prop-1': {
+          visits: 18,
+          services: 17,
+          issues: 1,
+          spend: 5200,
+          cervScore: 87,
+        },
+        'prop-2': {
+          visits: 15,
+          services: 14,
+          issues: 1,
+          spend: 3800,
+          cervScore: 82,
+        },
+        'prop-3': {
+          visits: 12,
+          services: 11,
+          issues: 1,
+          spend: 3500,
+          cervScore: 86,
+        },
       },
-      'prop-3': {
-        visits: 12,
-        services: 11,
-        issues: 1,
-        spend: 3500,
-        cervScore: 86,
+      serviceBreakdown: {
+        'Pest Services': { count: 12, cost: 2400 },
+        'Pool Services': { count: 18, cost: 4500 },
+        'Landscape Services': { count: 8, cost: 3200 },
+        'Janitorial Services': { count: 4, cost: 2400 },
       },
+      createdAt: '2024-02-01T00:00:00Z',
+      exportUrl: 'https://example.com/reports/january-2024.pdf',
     },
-    serviceBreakdown: {
-      'HVAC Maintenance': { count: 12, cost: 4800 },
-      'Cleaning Services': { count: 18, cost: 3600 },
-      'Landscaping': { count: 8, cost: 2400 },
-      'Security Systems': { count: 4, cost: 1700 },
-    },
-    createdAt: '2024-02-01T00:00:00Z',
-    exportUrl: 'https://example.com/reports/january-2024.pdf',
-  },
-  {
-    id: 'report-2',
-    portfolioId: 'portfolio-1',
-    month: '2023-12',
-    summary: {
-      totalVisits: 38,
-      completedServices: 36,
-      openIssues: 2,
-      totalSpend: 11200,
-      cervScoreChange: 1,
-    },
-    propertyBreakdown: {
-      'prop-1': {
-        visits: 16,
-        services: 15,
-        issues: 1,
-        spend: 4800,
-        cervScore: 84,
+    {
+      id: 'report-2',
+      portfolioId: 'portfolio-1',
+      month: '2023-12',
+      summary: {
+        totalVisits: 38,
+        completedServices: 36,
+        openIssues: 2,
+        totalSpend: 11200,
+        cervScoreChange: 1,
       },
-      'prop-2': {
-        visits: 12,
-        services: 12,
-        issues: 0,
-        spend: 3200,
-        cervScore: 82,
+      propertyBreakdown: {
+        'prop-1': {
+          visits: 16,
+          services: 15,
+          issues: 1,
+          spend: 4800,
+          cervScore: 84,
+        },
+        'prop-2': {
+          visits: 12,
+          services: 12,
+          issues: 0,
+          spend: 3200,
+          cervScore: 82,
+        },
+        'prop-3': {
+          visits: 10,
+          services: 9,
+          issues: 1,
+          spend: 3200,
+          cervScore: 84,
+        },
       },
-      'prop-3': {
-        visits: 10,
-        services: 9,
-        issues: 1,
-        spend: 3200,
-        cervScore: 84,
+      serviceBreakdown: {
+        'Pest Services': { count: 10, cost: 2000 },
+        'Pool Services': { count: 15, cost: 3750 },
+        'Landscape Services': { count: 6, cost: 2400 },
+        'Janitorial Services': { count: 5, cost: 3050 },
       },
+      createdAt: '2024-01-01T00:00:00Z',
+      exportUrl: 'https://example.com/reports/december-2023.pdf',
     },
-    serviceBreakdown: {
-      'HVAC Maintenance': { count: 10, cost: 4000 },
-      'Cleaning Services': { count: 15, cost: 3000 },
-      'Landscaping': { count: 6, cost: 1800 },
-      'Security Systems': { count: 5, cost: 2400 },
+  ],
+  quarterly: [
+    {
+      id: 'q-report-1',
+      portfolioId: 'portfolio-1',
+      month: '2024-Q1',
+      summary: {
+        totalVisits: 135,
+        completedServices: 126,
+        openIssues: 9,
+        totalSpend: 37500,
+        cervScoreChange: 8,
+      },
+      propertyBreakdown: {
+        'prop-1': {
+          visits: 54,
+          services: 51,
+          issues: 3,
+          spend: 15600,
+          cervScore: 87,
+        },
+        'prop-2': {
+          visits: 45,
+          services: 42,
+          issues: 3,
+          spend: 11400,
+          cervScore: 82,
+        },
+        'prop-3': {
+          visits: 36,
+          services: 33,
+          issues: 3,
+          spend: 10500,
+          cervScore: 86,
+        },
+      },
+      serviceBreakdown: {
+        'Pest Services': { count: 36, cost: 7200 },
+        'Pool Services': { count: 54, cost: 13500 },
+        'Landscape Services': { count: 24, cost: 9600 },
+        'Janitorial Services': { count: 12, cost: 7200 },
+      },
+      createdAt: '2024-04-01T00:00:00Z',
+      exportUrl: 'https://example.com/reports/q1-2024.pdf',
     },
-    createdAt: '2024-01-01T00:00:00Z',
-    exportUrl: 'https://example.com/reports/december-2023.pdf',
-  },
-];
+  ],
+  yearly: [
+    {
+      id: 'y-report-1',
+      portfolioId: 'portfolio-1',
+      month: '2023',
+      summary: {
+        totalVisits: 540,
+        completedServices: 504,
+        openIssues: 36,
+        totalSpend: 150000,
+        cervScoreChange: 15,
+      },
+      propertyBreakdown: {
+        'prop-1': {
+          visits: 216,
+          services: 204,
+          issues: 12,
+          spend: 62400,
+          cervScore: 87,
+        },
+        'prop-2': {
+          visits: 180,
+          services: 168,
+          issues: 12,
+          spend: 45600,
+          cervScore: 82,
+        },
+        'prop-3': {
+          visits: 144,
+          services: 132,
+          issues: 12,
+          spend: 42000,
+          cervScore: 86,
+        },
+      },
+      serviceBreakdown: {
+        'Pest Services': { count: 144, cost: 28800 },
+        'Pool Services': { count: 216, cost: 54000 },
+        'Landscape Services': { count: 96, cost: 38400 },
+        'Janitorial Services': { count: 48, cost: 28800 },
+      },
+      createdAt: '2024-01-01T00:00:00Z',
+      exportUrl: 'https://example.com/reports/2023-annual.pdf',
+    },
+  ],
+};
 
 export default function ReportsTab() {
   const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly');
+  const [selectedReport, setSelectedReport] = useState<MonthlyReport | null>(null);
+  const [showFullReport, setShowFullReport] = useState(false);
+  const [showCustomReport, setShowCustomReport] = useState(false);
 
   const handleExportReport = (report: MonthlyReport) => {
     Alert.alert('Export Report', `Exporting ${report.month} report as PDF...`);
   };
 
-  const handleViewDetails = (reportId: string) => {
-    Alert.alert('Report Details', `Viewing detailed report for ${reportId}`);
+  const handleViewDetails = (report: MonthlyReport) => {
+    setSelectedReport(report);
+    setShowFullReport(true);
+  };
+
+  const handleCustomReport = () => {
+    setShowCustomReport(true);
   };
 
   const getScoreColor = (change: number) => {
@@ -123,6 +224,8 @@ export default function ReportsTab() {
     if (change < 0) return <TrendingUp color={CommercialColors.systemRed} size={16} style={{ transform: [{ rotate: '180deg' }] }} />;
     return <TrendingUp color={CommercialColors.systemGray} size={16} style={{ transform: [{ rotate: '90deg' }] }} />;
   };
+
+  const currentReports = MOCK_REPORTS[selectedPeriod] || [];
 
   return (
     <View style={styles.container}>
@@ -165,7 +268,7 @@ export default function ReportsTab() {
             <View style={styles.reportsList}>
               <Text style={styles.sectionTitle}>Available Reports</Text>
               
-              {MOCK_REPORTS.map((report) => (
+              {currentReports.map((report) => (
                 <View key={report.id} style={styles.reportCard}>
                   <View style={styles.reportCardBackground}>
                     <View style={styles.reportHeader}>
@@ -173,10 +276,15 @@ export default function ReportsTab() {
                         <View style={styles.reportTitleRow}>
                           <FileText color={CommercialColors.systemBlue} size={20} />
                           <Text style={styles.reportTitle}>
-                            {new Date(report.month + '-01').toLocaleDateString('en-US', {
-                              month: 'long',
-                              year: 'numeric'
-                            })} Report
+                            {selectedPeriod === 'yearly' 
+                              ? `${report.month} Annual Report`
+                              : selectedPeriod === 'quarterly'
+                              ? `${report.month} Report`
+                              : new Date(report.month + '-01').toLocaleDateString('en-US', {
+                                  month: 'long',
+                                  year: 'numeric'
+                                }) + ' Report'
+                            }
                           </Text>
                         </View>
                         <Text style={styles.reportDate}>
@@ -249,37 +357,10 @@ export default function ReportsTab() {
                       </View>
                     </View>
 
-                    {/* Property Breakdown Preview */}
-                    <View style={styles.propertyBreakdown}>
-                      <Text style={styles.breakdownTitle}>Property Performance</Text>
-                      {Object.entries(report.propertyBreakdown).slice(0, 2).map(([propertyId, data]) => {
-                        const propertyName = propertyId === 'prop-1' ? 'Downtown Office Tower' :
-                                           propertyId === 'prop-2' ? 'Westside Retail Center' :
-                                           'Industrial Park Unit A';
-                        
-                        return (
-                          <View key={propertyId} style={styles.propertyItem}>
-                            <Text style={styles.propertyName}>{propertyName}</Text>
-                            <View style={styles.propertyStats}>
-                              <Text style={styles.propertyStatText}>
-                                {data.services} services • ${(data.spend / 1000).toFixed(1)}K
-                              </Text>
-                              <Text style={[
-                                styles.propertyScore,
-                                { color: getScoreColor(data.cervScore - 80) }
-                              ]}>
-                                Score: {data.cervScore}
-                              </Text>
-                            </View>
-                          </View>
-                        );
-                      })}
-                    </View>
-
                     {/* View Details Button */}
                     <TouchableOpacity 
                       style={styles.viewDetailsButton}
-                      onPress={() => handleViewDetails(report.id)}
+                      onPress={() => handleViewDetails(report)}
                     >
                       <View style={styles.viewDetailsBackground}>
                         <Text style={styles.viewDetailsText}>View Full Report</Text>
@@ -295,7 +376,7 @@ export default function ReportsTab() {
             <View style={styles.quickActions}>
               <Text style={styles.sectionTitle}>Quick Actions</Text>
               
-              <TouchableOpacity style={styles.actionCard}>
+              <TouchableOpacity style={styles.actionCard} onPress={handleCustomReport}>
                 <View style={styles.actionCardBackground}>
                   <View style={styles.actionIcon}>
                     <FileText color={CommercialColors.systemPurple} size={24} />
@@ -330,6 +411,163 @@ export default function ReportsTab() {
           </ScrollView>
         </SafeAreaView>
       </View>
+
+      {/* Full Report Modal */}
+      <Modal
+        visible={showFullReport}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>
+              {selectedReport && (
+                selectedPeriod === 'yearly' 
+                  ? `${selectedReport.month} Annual Report`
+                  : selectedPeriod === 'quarterly'
+                  ? `${selectedReport.month} Report`
+                  : new Date(selectedReport.month + '-01').toLocaleDateString('en-US', {
+                      month: 'long',
+                      year: 'numeric'
+                    }) + ' Report'
+              )}
+            </Text>
+            <TouchableOpacity onPress={() => setShowFullReport(false)}>
+              <X color={CommercialColors.label} size={24} />
+            </TouchableOpacity>
+          </View>
+          
+          <ScrollView style={styles.modalContent}>
+            {selectedReport && (
+              <>
+                <View style={styles.fullReportSection}>
+                  <Text style={styles.fullReportSectionTitle}>Executive Summary</Text>
+                  <Text style={styles.fullReportText}>
+                    This {selectedPeriod} report covers {selectedReport.summary.totalVisits} service visits across your portfolio, 
+                    with {selectedReport.summary.completedServices} services completed successfully. 
+                    Your Cerv Score improved by {selectedReport.summary.cervScoreChange} points, 
+                    indicating strong property management performance.
+                  </Text>
+                </View>
+
+                <View style={styles.fullReportSection}>
+                  <Text style={styles.fullReportSectionTitle}>Property Performance</Text>
+                  {Object.entries(selectedReport.propertyBreakdown).map(([propertyId, data]) => {
+                    const propertyName = propertyId === 'prop-1' ? 'Downtown Austin Office' :
+                                       propertyId === 'prop-2' ? 'South Austin Retail Center' :
+                                       'East Austin Industrial Complex';
+                    
+                    return (
+                      <View key={propertyId} style={styles.propertyBreakdownCard}>
+                        <Text style={styles.propertyBreakdownName}>{propertyName}</Text>
+                        <View style={styles.propertyBreakdownStats}>
+                          <Text style={styles.propertyBreakdownStat}>Visits: {data.visits}</Text>
+                          <Text style={styles.propertyBreakdownStat}>Services: {data.services}</Text>
+                          <Text style={styles.propertyBreakdownStat}>Issues: {data.issues}</Text>
+                          <Text style={styles.propertyBreakdownStat}>Spend: ${data.spend.toLocaleString()}</Text>
+                          <Text style={styles.propertyBreakdownStat}>Score: {data.cervScore}</Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+
+                <View style={styles.fullReportSection}>
+                  <Text style={styles.fullReportSectionTitle}>Service Breakdown</Text>
+                  {Object.entries(selectedReport.serviceBreakdown).map(([service, data]) => (
+                    <View key={service} style={styles.serviceBreakdownItem}>
+                      <Text style={styles.serviceBreakdownName}>{service}</Text>
+                      <Text style={styles.serviceBreakdownData}>
+                        {data.count} services • ${data.cost.toLocaleString()}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+
+                <View style={styles.fullReportSection}>
+                  <Text style={styles.fullReportSectionTitle}>Recommendations</Text>
+                  <Text style={styles.fullReportText}>
+                    • Continue current maintenance schedule for optimal performance{'\n'}
+                    • Consider increasing landscape service frequency during peak season{'\n'}
+                    • Monitor pest control effectiveness in humid months{'\n'}
+                    • Schedule quarterly deep cleaning for high-traffic areas
+                  </Text>
+                </View>
+              </>
+            )}
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
+
+      {/* Custom Report Modal */}
+      <Modal
+        visible={showCustomReport}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Custom Report Builder</Text>
+            <TouchableOpacity onPress={() => setShowCustomReport(false)}>
+              <X color={CommercialColors.label} size={24} />
+            </TouchableOpacity>
+          </View>
+          
+          <ScrollView style={styles.modalContent}>
+            <View style={styles.customReportSection}>
+              <Text style={styles.customReportSectionTitle}>Date Range</Text>
+              <View style={styles.customReportOptions}>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Last 30 Days</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Last 90 Days</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Custom Range</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.customReportSection}>
+              <Text style={styles.customReportSectionTitle}>Properties</Text>
+              <View style={styles.customReportOptions}>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>All Properties</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Downtown Austin Office</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>South Austin Retail Center</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.customReportSection}>
+              <Text style={styles.customReportSectionTitle}>Services</Text>
+              <View style={styles.customReportOptions}>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>All Services</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Pest Services</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Pool Services</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customReportOption}>
+                  <Text style={styles.customReportOptionText}>Landscape Services</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity style={styles.generateReportButton}>
+              <Text style={styles.generateReportButtonText}>Generate Custom Report</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
     </View>
   );
 }
@@ -498,40 +736,6 @@ const styles = StyleSheet.create({
     ...CommercialTypography.headline,
     fontWeight: '700',
   },
-  propertyBreakdown: {
-    marginBottom: 20,
-  },
-  breakdownTitle: {
-    ...CommercialTypography.headline,
-    color: CommercialColors.label,
-    marginBottom: 12,
-  },
-  propertyItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-    borderBottomWidth: 0.5,
-    borderBottomColor: CommercialColors.separator,
-  },
-  propertyName: {
-    ...CommercialTypography.subheadline,
-    fontWeight: '600',
-    color: CommercialColors.label,
-    flex: 1,
-  },
-  propertyStats: {
-    alignItems: 'flex-end',
-  },
-  propertyStatText: {
-    ...CommercialTypography.caption1,
-    color: CommercialColors.secondaryLabel,
-    marginBottom: 2,
-  },
-  propertyScore: {
-    ...CommercialTypography.caption1,
-    fontWeight: '600',
-  },
   viewDetailsButton: {
     borderRadius: CommercialBorderRadius.medium,
     overflow: 'hidden',
@@ -593,5 +797,115 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: CommercialSpacing.xl,
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    backgroundColor: CommercialColors.background,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: CommercialColors.separator,
+  },
+  modalTitle: {
+    ...CommercialTypography.title2,
+    color: CommercialColors.label,
+  },
+  modalContent: {
+    flex: 1,
+    padding: 24,
+  },
+  fullReportSection: {
+    marginBottom: 32,
+  },
+  fullReportSectionTitle: {
+    ...CommercialTypography.title3,
+    color: CommercialColors.label,
+    marginBottom: 16,
+  },
+  fullReportText: {
+    ...CommercialTypography.body,
+    color: CommercialColors.secondaryLabel,
+    lineHeight: 24,
+  },
+  propertyBreakdownCard: {
+    backgroundColor: CommercialColors.cardBackground,
+    borderRadius: CommercialBorderRadius.medium,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: CommercialColors.separator,
+  },
+  propertyBreakdownName: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.label,
+    marginBottom: 8,
+  },
+  propertyBreakdownStats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  propertyBreakdownStat: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.secondaryLabel,
+    backgroundColor: CommercialColors.secondarySystemFill,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  serviceBreakdownItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: CommercialColors.separator,
+  },
+  serviceBreakdownName: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.label,
+  },
+  serviceBreakdownData: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.secondaryLabel,
+  },
+  customReportSection: {
+    marginBottom: 32,
+  },
+  customReportSectionTitle: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.label,
+    marginBottom: 16,
+  },
+  customReportOptions: {
+    gap: 8,
+  },
+  customReportOption: {
+    backgroundColor: CommercialColors.cardBackground,
+    borderRadius: CommercialBorderRadius.medium,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: CommercialColors.separator,
+  },
+  customReportOptionText: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.label,
+  },
+  generateReportButton: {
+    backgroundColor: CommercialColors.systemBlue,
+    borderRadius: CommercialBorderRadius.large,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  generateReportButtonText: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.white,
   },
 });

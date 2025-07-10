@@ -5,23 +5,24 @@ import {
   StyleSheet, 
   ScrollView, 
   TouchableOpacity,
-  Alert 
+  Alert,
+  Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Building2, Plus, Bell, Settings, TrendingUp, TriangleAlert as AlertTriangle, Calendar, DollarSign, Camera, MessageSquare, ChevronRight, Users } from 'lucide-react-native';
+import { Building2, Plus, Bell, Settings, TrendingUp, TriangleAlert as AlertTriangle, Calendar, DollarSign, Camera, MessageSquare, ChevronRight, Users, X } from 'lucide-react-native';
 import { CommercialColors, CommercialShadows, CommercialSpacing, CommercialTypography, CommercialBorderRadius } from '@/themes/commercialDesignSystem';
 import type { CommercialProperty, CommercialPortfolio, CommercialCervScore, CommercialUserRole } from '@/types/commercial';
 
 const MOCK_PORTFOLIO: CommercialPortfolio = {
   id: 'portfolio-1',
   userId: 'user-1',
-  companyName: 'Austin Commercial Properties',
+  companyName: 'Austin Commercial Properties LLC',
   properties: [
     {
       id: 'prop-1',
-      name: 'Downtown Austin Office Complex',
-      address: '500 W 2nd Street',
+      name: 'Downtown Austin Office',
+      address: '123 Congress Ave',
       city: 'Austin',
       state: 'TX',
       zipCode: '78701',
@@ -34,8 +35,8 @@ const MOCK_PORTFOLIO: CommercialPortfolio = {
     },
     {
       id: 'prop-2',
-      name: 'South Austin Retail Plaza',
-      address: '1200 S Lamar Blvd',
+      name: 'South Austin Retail Center',
+      address: '456 South Lamar Blvd',
       city: 'Austin',
       state: 'TX',
       zipCode: '78704',
@@ -48,8 +49,8 @@ const MOCK_PORTFOLIO: CommercialPortfolio = {
     },
     {
       id: 'prop-3',
-      name: 'East Austin Industrial Center',
-      address: '3400 E 5th Street',
+      name: 'East Austin Industrial Complex',
+      address: '789 East 6th St',
       city: 'Austin',
       state: 'TX',
       zipCode: '78702',
@@ -108,9 +109,49 @@ const MOCK_CERV_SCORES: { [key: string]: CommercialCervScore } = {
   },
 };
 
+const MOCK_OPEN_ISSUES = [
+  {
+    id: 'issue-1',
+    title: 'Pool Filter Maintenance Required',
+    property: 'Downtown Austin Office',
+    priority: 'medium',
+    category: 'Pool Services',
+    reportedDate: '2024-01-15',
+    description: 'Pool filter needs cleaning and chemical balance adjustment',
+  },
+  {
+    id: 'issue-2',
+    title: 'Pest Control Follow-up',
+    property: 'South Austin Retail Center',
+    priority: 'high',
+    category: 'Pest Services',
+    reportedDate: '2024-01-18',
+    description: 'Follow-up treatment needed for ant infestation in break room',
+  },
+  {
+    id: 'issue-3',
+    title: 'Landscape Irrigation Repair',
+    property: 'East Austin Industrial Complex',
+    priority: 'medium',
+    category: 'Landscape Services',
+    reportedDate: '2024-01-20',
+    description: 'Sprinkler system zone 3 not functioning properly',
+  },
+  {
+    id: 'issue-4',
+    title: 'Tree Pruning Required',
+    property: 'Downtown Austin Office',
+    priority: 'low',
+    category: 'Tree Services',
+    reportedDate: '2024-01-22',
+    description: 'Oak trees near entrance need seasonal pruning',
+  },
+];
+
 export default function DashboardTab() {
   const [selectedProperty, setSelectedProperty] = useState<CommercialProperty>(MOCK_PORTFOLIO.properties[0]);
   const [currentUserRole] = useState<CommercialUserRole>('property_manager');
+  const [showIssuesModal, setShowIssuesModal] = useState(false);
 
   const handlePropertySelect = (property: CommercialProperty) => {
     setSelectedProperty(property);
@@ -125,11 +166,15 @@ export default function DashboardTab() {
   };
 
   const handleNotifications = () => {
-    Alert.alert('Notifications', 'No new notifications at this time.');
+    Alert.alert('Open Issues', `You have ${MOCK_PORTFOLIO.totalOpenIssues} open issues across your portfolio:\n\n• HVAC maintenance needed at Downtown Austin Office\n• Pool cleaning overdue at South Austin Retail\n• Landscape trimming required at East Austin Industrial\n• Pest control follow-up needed`);
   };
 
   const handleSettings = () => {
     Alert.alert('Settings', 'Settings panel will be available soon.');
+  };
+
+  const handleOpenIssuesClick = () => {
+    setShowIssuesModal(true);
   };
 
   const currentScore = MOCK_CERV_SCORES[selectedProperty.id];
@@ -138,6 +183,15 @@ export default function DashboardTab() {
     if (score >= 85) return CommercialColors.systemBlue;
     if (score >= 70) return CommercialColors.systemOrange;
     return CommercialColors.systemRed;
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return CommercialColors.systemRed;
+      case 'medium': return CommercialColors.systemOrange;
+      case 'low': return CommercialColors.systemBlue;
+      default: return CommercialColors.systemGray;
+    }
   };
 
   const getTrendIcon = (trend: string) => {
@@ -166,7 +220,7 @@ export default function DashboardTab() {
             <View style={styles.headerActions}>
               <TouchableOpacity style={styles.headerButton} onPress={handleNotifications}>
                 <Bell color={CommercialColors.secondaryLabel} size={22} />
-                <View style={styles.notificationDot} />
+                {MOCK_PORTFOLIO.totalOpenIssues > 0 && <View style={styles.notificationDot} />}
               </TouchableOpacity>
               <TouchableOpacity style={styles.headerButton} onPress={handleSettings}>
                 <Settings color={CommercialColors.secondaryLabel} size={22} />
@@ -199,15 +253,19 @@ export default function DashboardTab() {
                   </View>
                 </View>
                 
-                <View style={styles.statCard}>
+                <TouchableOpacity style={styles.statCard} onPress={handleOpenIssuesClick}>
                   <View style={styles.statCardBackground}>
                     <View style={styles.statHeader}>
-                      <AlertTriangle color={CommercialColors.systemOrange} size={20} />
+                      <TouchableOpacity onPress={handleNotifications}>
+                        <AlertTriangle color={CommercialColors.systemOrange} size={20} />
+                      </TouchableOpacity>
                       <Text style={styles.statValue}>{MOCK_PORTFOLIO.totalOpenIssues}</Text>
                     </View>
-                    <Text style={styles.statLabel}>Open Issues</Text>
+                    <TouchableOpacity onPress={handleNotifications}>
+                      <Text style={styles.statLabel}>Open Issues</Text>
+                    </TouchableOpacity>
                   </View>
-                </View>
+                </TouchableOpacity>
                 
                 <View style={styles.statCard}>
                   <View style={styles.statCardBackground}>
@@ -229,6 +287,15 @@ export default function DashboardTab() {
                   const isSelected = property.id === selectedProperty.id;
                   const score = MOCK_CERV_SCORES[property.id];
                   
+                  // Update property names to Austin locations
+                  const propertyName = property.id === 'prop-1' ? 'Downtown Austin Office' :
+                                     property.id === 'prop-2' ? 'South Austin Retail Center' :
+                                     'East Austin Industrial Complex';
+                  
+                  const propertyCity = property.id === 'prop-1' ? 'Downtown Austin' :
+                                     property.id === 'prop-2' ? 'South Austin' :
+                                     'East Austin';
+                  
                   return (
                     <TouchableOpacity
                       key={property.id}
@@ -246,13 +313,13 @@ export default function DashboardTab() {
                           styles.propertyName,
                           isSelected && styles.propertyNameSelected
                         ]}>
-                          {property.name}
+                          {propertyName}
                         </Text>
                         <Text style={[
                           styles.propertyAddress,
                           isSelected && styles.propertyAddressSelected
                         ]}>
-                          {property.address}
+                          {propertyCity}, TX
                         </Text>
                         <View style={styles.propertyMeta}>
                           <Text style={[
@@ -281,7 +348,11 @@ export default function DashboardTab() {
             <View style={styles.propertyDetails}>
               <View style={styles.propertyHeader}>
                 <View style={styles.propertyInfo}>
-                  <Text style={styles.propertyTitle}>{selectedProperty.name}</Text>
+                  <Text style={styles.propertyTitle}>
+                    {selectedProperty.id === 'prop-1' ? 'Downtown Austin Office' :
+                     selectedProperty.id === 'prop-2' ? 'South Austin Retail Center' :
+                     'East Austin Industrial Complex'}
+                  </Text>
                   <Text style={styles.propertySubtitle}>
                     {selectedProperty.squareFootage?.toLocaleString()} sq ft • {selectedProperty.floors} floors
                   </Text>
@@ -305,9 +376,9 @@ export default function DashboardTab() {
               <View style={styles.scoreBreakdown}>
                 {[
                   { key: 'maintenance', label: 'Maintenance', value: currentScore.maintenance },
-                  { key: 'cleanliness', label: 'Janitorial', value: currentScore.cleanliness },
+                  { key: 'cleanliness', label: 'Cleanliness', value: currentScore.cleanliness },
                   { key: 'landscaping', label: 'Landscaping', value: currentScore.landscaping },
-                  { key: 'pest', label: 'Pest Control', value: currentScore.security },
+                  { key: 'security', label: 'Security', value: currentScore.security },
                 ].map((item) => (
                   <View key={item.key} style={styles.scoreItem}>
                     <Text style={styles.scoreItemLabel}>{item.label}</Text>
@@ -399,7 +470,7 @@ export default function DashboardTab() {
                     id: '1',
                     type: 'service',
                     title: 'Pool Service Completed',
-                    property: 'Downtown Austin Office Complex',
+                    property: 'Downtown Austin Office',
                     time: '2 hours ago',
                     icon: <Building2 color={CommercialColors.systemBlue} size={16} />,
                   },
@@ -407,7 +478,7 @@ export default function DashboardTab() {
                     id: '2',
                     type: 'issue',
                     title: 'Pest Control Issue Reported',
-                    property: 'South Austin Retail Plaza',
+                    property: 'South Austin Retail Center',
                     time: '4 hours ago',
                     icon: <AlertTriangle color={CommercialColors.systemOrange} size={16} />,
                   },
@@ -415,7 +486,7 @@ export default function DashboardTab() {
                     id: '3',
                     type: 'user',
                     title: 'New team member added',
-                    property: 'Portfolio Access',
+                    property: 'East Austin Industrial Complex',
                     time: '1 day ago',
                     icon: <Users color={CommercialColors.systemPurple} size={16} />,
                   },
@@ -441,6 +512,59 @@ export default function DashboardTab() {
           </ScrollView>
         </SafeAreaView>
       </View>
+
+      {/* Open Issues Modal */}
+      <Modal
+        visible={showIssuesModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Open Issues</Text>
+            <TouchableOpacity onPress={() => setShowIssuesModal(false)}>
+              <X color={CommercialColors.label} size={24} />
+            </TouchableOpacity>
+          </View>
+          
+          <ScrollView style={styles.modalContent}>
+            {MOCK_OPEN_ISSUES.map((issue) => (
+              <TouchableOpacity key={issue.id} style={styles.issueCard}>
+                <View style={styles.issueCardContent}>
+                  <View style={styles.issueHeader}>
+                    <View style={[
+                      styles.priorityIndicator,
+                      { backgroundColor: getPriorityColor(issue.priority) }
+                    ]} />
+                    <Text style={styles.issueTitle}>{issue.title}</Text>
+                  </View>
+                  
+                  <Text style={styles.issueProperty}>{issue.property}</Text>
+                  <Text style={styles.issueCategory}>{issue.category}</Text>
+                  <Text style={styles.issueDescription}>{issue.description}</Text>
+                  
+                  <View style={styles.issueFooter}>
+                    <Text style={styles.issueDate}>
+                      Reported: {new Date(issue.reportedDate).toLocaleDateString()}
+                    </Text>
+                    <View style={[
+                      styles.priorityBadge,
+                      { backgroundColor: getPriorityColor(issue.priority) + '20' }
+                    ]}>
+                      <Text style={[
+                        styles.priorityText,
+                        { color: getPriorityColor(issue.priority) }
+                      ]}>
+                        {issue.priority.toUpperCase()}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
     </View>
   );
 }
@@ -764,42 +888,4 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   activityItemBackground: {
-    backgroundColor: CommercialColors.cardBackground,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: CommercialSpacing.lg,
-    borderWidth: 0.5,
-    borderColor: CommercialColors.separator,
-    borderRadius: CommercialBorderRadius.medium,
-  },
-  activityIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: CommercialColors.secondarySystemFill,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  activityContent: {
-    flex: 1,
-  },
-  activityTitle: {
-    ...CommercialTypography.subheadline,
-    fontWeight: '600',
-    color: CommercialColors.label,
-    marginBottom: 2,
-  },
-  activityProperty: {
-    ...CommercialTypography.caption1,
-    color: CommercialColors.secondaryLabel,
-    marginBottom: 2,
-  },
-  activityTime: {
-    ...CommercialTypography.caption1,
-    color: CommercialColors.tertiaryLabel,
-  },
-  bottomSpacing: {
-    height: CommercialSpacing.xl,
-  },
-});
+    backgroundColor<boltArtifact id="enhanced-interactions" title="Enhanced App Interactions and Click-throughs">

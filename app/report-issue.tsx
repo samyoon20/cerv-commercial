@@ -22,8 +22,8 @@ const MOCK_ISSUE_HISTORY: IssueReport[] = [
     id: 'issue-1',
     propertyId: 'prop-1',
     reportedBy: 'user-1',
-    title: 'Pest Control Issue',
-    description: 'Noticed increased pest activity in the office break room area. Need immediate pest control service.',
+    title: 'Pool Equipment Malfunction',
+    description: 'The pool pump is making unusual noises and the water circulation seems reduced.',
     photos: [
       'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
@@ -39,8 +39,8 @@ const MOCK_ISSUE_HISTORY: IssueReport[] = [
     id: 'issue-2',
     propertyId: 'prop-1',
     reportedBy: 'user-1',
-    title: 'Pool Equipment Malfunction',
-    description: 'Pool filtration system is not working properly. Water clarity is declining.',
+    title: 'Landscape Irrigation Problem',
+    description: 'Several sprinkler heads in the front landscape area are not working properly.',
     photos: [
       'https://images.pexels.com/photos/1036657/pexels-photo-1036657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
@@ -57,8 +57,8 @@ const MOCK_ISSUE_HISTORY: IssueReport[] = [
     id: 'issue-3',
     propertyId: 'prop-2',
     reportedBy: 'user-1',
-    title: 'Landscaping Maintenance Needed',
-    description: 'Front entrance landscaping needs attention. Several plants are dying and irrigation system needs repair.',
+    title: 'Pest Control Needed',
+    description: 'Noticed increased ant activity near the loading dock area. Requires immediate pest control attention.',
     photos: [
       'https://images.pexels.com/photos/5797999/pexels-photo-5797999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
     ],
@@ -86,18 +86,11 @@ export default function ReportIssueScreen() {
   };
 
   const handleAddPhoto = () => {
-    // In a real app, this would use expo-image-picker
-    // For demo purposes, we'll add a mock photo URL
-    const mockPhotos = [
-      'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1036657/pexels-photo-1036657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/5797999/pexels-photo-5797999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-    ];
-    
-    const randomPhoto = mockPhotos[Math.floor(Math.random() * mockPhotos.length)];
+    // Add a hardcoded photo instead of creating an error
+    const hardcodedPhoto = 'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
     
     if (photos.length < 5) {
-      setPhotos([...photos, randomPhoto]);
+      setPhotos([...photos, hardcodedPhoto]);
     } else {
       Alert.alert('Maximum Photos', 'You can add up to 5 photos per issue.');
     }
@@ -290,7 +283,7 @@ export default function ReportIssueScreen() {
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Category</Text>
                   <View style={styles.categoryOptions}>
-                    {['pest', 'pool', 'landscaping', 'janitorial', 'other'].map((category) => (
+                    {['pest', 'pool', 'landscape', 'tree', 'exterior', 'janitorial', 'waste'].map((category) => (
                       <TouchableOpacity
                         key={category}
                         style={[
@@ -303,10 +296,8 @@ export default function ReportIssueScreen() {
                           styles.categoryText,
                           issueCategory === category && styles.categoryTextSelected
                         ]}>
-                          {category === 'pest' ? 'Pest Control' : 
-                           category === 'pool' ? 'Pool Services' : 
-                           category === 'janitorial' ? 'Janitorial' :
-                           category.charAt(0).toUpperCase() + category.slice(1)}
+                          {category.charAt(0).toUpperCase() + category.slice(1)}
+                          {category === 'janitorial' ? ' Services' : category === 'waste' ? ' Services' : ` Services`}
                         </Text>
                       </TouchableOpacity>
                     ))}

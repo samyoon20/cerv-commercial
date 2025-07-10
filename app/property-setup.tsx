@@ -172,7 +172,7 @@ export default function PropertySetupScreen() {
               <Text style={styles.label}>Property Address *</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter property address"
+                placeholder="e.g., 123 Congress Ave"
                 placeholderTextColor={CommercialColors.lightTertiaryLabel}
                 value={formData.address}
                 onChangeText={(value) => handleInputChange('address', value)}
@@ -185,7 +185,7 @@ export default function PropertySetupScreen() {
                 <Text style={styles.label}>City *</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="City name"
+                  placeholder="Austin"
                   placeholderTextColor={CommercialColors.lightTertiaryLabel}
                   value={formData.city}
                   onChangeText={(value) => handleInputChange('city', value)}
@@ -196,7 +196,7 @@ export default function PropertySetupScreen() {
                 <Text style={styles.label}>State *</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="CA"
+                  placeholder="TX"
                   placeholderTextColor={CommercialColors.lightTertiaryLabel}
                   value={formData.state}
                   onChangeText={(value) => handleInputChange('state', value.toUpperCase())}
@@ -210,7 +210,7 @@ export default function PropertySetupScreen() {
               <Text style={styles.label}>ZIP Code *</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter ZIP code"
+                placeholder="78701"
                 placeholderTextColor={CommercialColors.lightTertiaryLabel}
                 value={formData.zipCode}
                 onChangeText={(value) => handleInputChange('zipCode', value)}
