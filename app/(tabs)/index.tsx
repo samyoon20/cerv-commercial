@@ -203,10 +203,10 @@ export default function DashboardTab() {
                 <View style={styles.statCard}>
                   <View style={styles.statCardBackground}>
                     <View style={styles.statHeader}>
-                      <TrendingUp color={getScoreColor(MOCK_PORTFOLIO.averageCervScore)} size={20} />
-                      <Text style={styles.statValue}>{MOCK_PORTFOLIO.averageCervScore}</Text>
+                      <Building2 color={CommercialColors.systemBlue} size={20} />
+                      <Text style={styles.statValue}>{MOCK_PORTFOLIO.totalProperties}</Text>
                     </View>
-                    <Text style={styles.statLabel}>Avg Score</Text>
+                    <Text style={styles.statLabel}>Properties</Text>
                   </View>
                 </View>
                 
@@ -215,22 +215,17 @@ export default function DashboardTab() {
                     <View style={styles.statHeader}>
                       <TouchableOpacity onPress={handleOpenIssuesClick}>
                         <AlertTriangle color={CommercialColors.systemOrange} size={20} />
+                      <TouchableOpacity onPress={() => router.push('/report-issue')}>
+                        <AlertTriangle color={CommercialColors.systemOrange} size={20} />
                       </TouchableOpacity>
-                      <Text style={styles.statValue}>{MOCK_PORTFOLIO.totalOpenIssues}</Text>
+                      <TouchableOpacity onPress={() => router.push('/report-issue')}>
+                        <Text style={styles.statValue}>{MOCK_PORTFOLIO.totalOpenIssues}</Text>
+                      </TouchableOpacity>
                     </View>
                     <Text style={styles.statLabel}>Open Issues</Text>
                   </View>
                 </View>
                 
-                <View style={styles.statCard}>
-                  <View style={styles.statCardBackground}>
-                    <View style={styles.statHeader}>
-                      <DollarSign color={CommercialColors.systemBlue} size={20} />
-                      <Text style={[styles.statValue, styles.smallerStatValue]}>${(MOCK_PORTFOLIO.monthlySpend / 1000).toFixed(0)}K</Text>
-                    </View>
-                    <Text style={styles.statLabel}>Monthly</Text>
-                  </View>
-                </View>
               </View>
             </View>
 
@@ -336,9 +331,9 @@ export default function DashboardTab() {
                 <TouchableOpacity style={styles.actionCard} onPress={handleRequestWork}>
                   <View style={styles.actionCardBackground}>
                     <View style={styles.actionIconContainer}>
-                      <Plus color={CommercialColors.systemBlue} size={24} />
+                      <Plus color={CommercialColors.systemPurple} size={24} />
                     </View>
-                    <Text style={styles.actionTitle}>Request Work</Text>
+                    <Text style={styles.actionTitle}>Add New Service</Text>
                     <Text style={styles.actionSubtitle}>Schedule services</Text>
                   </View>
                 </TouchableOpacity>

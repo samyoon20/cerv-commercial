@@ -16,6 +16,14 @@ import { ArrowLeft, Camera, Upload, X, TriangleAlert as AlertTriangle, ChevronRi
 import { CommercialColors, CommercialTypography, CommercialBorderRadius, CommercialSpacing } from '@/themes/commercialDesignSystem';
 import type { IssueReport } from '@/types/commercial';
 
+// Simplified priority options
+const PRIORITY_OPTIONS = [
+  { id: 'tomorrow', label: 'Tomorrow', value: 'urgent' },
+  { id: 'this_week', label: 'This Week', value: 'high' },
+  { id: 'next_week', label: 'Next Week', value: 'medium' },
+  { id: 'flexible', label: 'Flexible', value: 'low' },
+];
+
 // Mock data for issue history
 const MOCK_ISSUE_HISTORY: IssueReport[] = [
   {
@@ -230,6 +238,33 @@ export default function ReportIssueScreen() {
               <View style={styles.formSection}>
                 <Text style={styles.sectionTitle}>Issue Details</Text>
                 
+                <View style={styles.photoSection}>
+                  <Text style={styles.sectionSubtitle}>Add photos to help us understand the issue (optional)</Text>
+                  
+                  <View style={styles.photoGrid}>
+                    {photos.map((photo, index) => (
+                      <View key={index} style={styles.photoContainer}>
+                        <Image source={{ uri: photo }} style={styles.photoThumbnail} />
+                        <TouchableOpacity 
+                          style={styles.removePhotoButton}
+                          onPress={() => handleRemovePhoto(index)}
+                        >
+                          <X color={CommercialColors.white} size={16} />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                    
+                    {photos.length < 5 && (
+                      <TouchableOpacity style={styles.addPhotoButton} onPress={handleAddPhoto}>
+                        <View style={styles.addPhotoContent}>
+                          <Camera color={CommercialColors.lightSecondaryLabel} size={24} />
+                          <Text style={styles.addPhotoText}>Add Photo</Text>
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
+                
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Title *</Text>
                   <TextInput
@@ -256,24 +291,24 @@ export default function ReportIssueScreen() {
                 </View>
                 
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Priority</Text>
+                  <Text style={styles.label}>When do you need this fixed?</Text>
                   <View style={styles.priorityOptions}>
-                    {['low', 'medium', 'high', 'urgent'].map((priority) => (
+                    {PRIORITY_OPTIONS.map((option) => (
                       <TouchableOpacity
-                        key={priority}
+                        key={option.id}
                         style={[
                           styles.priorityOption,
-                          issuePriority === priority && styles.priorityOptionSelected,
-                          { borderColor: getPriorityColor(priority) }
+                          issuePriority === option.value && styles.priorityOptionSelected,
+                          { borderColor: getPriorityColor(option.value) }
                         ]}
-                        onPress={() => setIssuePriority(priority as any)}
+                        onPress={() => setIssuePriority(option.value as any)}
                       >
                         <Text style={[
                           styles.priorityText,
-                          issuePriority === priority && styles.priorityTextSelected,
-                          { color: getPriorityColor(priority) }
+                          issuePriority === option.value && styles.priorityTextSelected,
+                          { color: getPriorityColor(option.value) }
                         ]}>
-                          {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                          {option.label}
                         </Text>
                       </TouchableOpacity>
                     ))}
@@ -281,7 +316,7 @@ export default function ReportIssueScreen() {
                 </View>
                 
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Category</Text>
+                  <Text style={styles.label}>Category (Auto-detected)</Text>
                   <View style={styles.categoryOptions}>
                     {['pest', 'pool', 'landscape', 'tree', 'exterior', 'janitorial', 'waste'].map((category) => (
                       <TouchableOpacity
@@ -303,48 +338,6 @@ export default function ReportIssueScreen() {
                     ))}
                   </View>
                 </View>
-              </View>
-
-              <View style={styles.photoSection}>
-                <Text style={styles.sectionTitle}>Photos</Text>
-                <Text style={styles.sectionSubtitle}>Add photos to help us understand the issue (up to 5)</Text>
-                
-                <View style={styles.photoGrid}>
-                  {photos.map((photo, index) => (
-                    <View key={index} style={styles.photoContainer}>
-                      <Image source={{ uri: photo }} style={styles.photoThumbnail} />
-                      <TouchableOpacity 
-                        style={styles.removePhotoButton}
-                        onPress={() => handleRemovePhoto(index)}
-                      >
-                        <X color={CommercialColors.white} size={16} />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                  
-                  {photos.length < 5 && (
-                    <TouchableOpacity style={styles.addPhotoButton} onPress={handleAddPhoto}>
-                      <View style={styles.addPhotoContent}>
-                        <Camera color={CommercialColors.lightSecondaryLabel} size={24} />
-                        <Text style={styles.addPhotoText}>Add Photo</Text>
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              </View>
-
-              <View style={styles.notesSection}>
-                <Text style={styles.sectionTitle}>Additional Notes</Text>
-                <TextInput
-                  style={[styles.input, styles.textArea]}
-                  placeholder="Any additional information or special instructions"
-                  placeholderTextColor={CommercialColors.lightTertiaryLabel}
-                  value={notes}
-                  onChangeText={setNotes}
-                  multiline
-                  numberOfLines={3}
-                  textAlignVertical="top"
-                />
               </View>
 
               <View style={styles.infoCard}>

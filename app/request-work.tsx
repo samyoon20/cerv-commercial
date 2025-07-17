@@ -12,54 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { ArrowLeft, Building2, ChevronRight, Wrench, Shield, Paintbrush, Leaf, Droplets } from 'lucide-react-native';
+import { ArrowLeft, Building2, ChevronRight, Wrench, Shield, Paintbrush, Leaf, Droplets, Plus } from 'lucide-react-native';
 import { CommercialColors, CommercialTypography, CommercialBorderRadius, CommercialSpacing } from '@/themes/commercialDesignSystem';
 import type { CommercialProperty } from '@/types/commercial';
-
-const MOCK_PROPERTIES: CommercialProperty[] = [
-  {
-    id: 'prop-1',
-    name: 'Downtown Austin Office',
-    address: '123 Congress Ave',
-    city: 'Austin',
-    state: 'TX',
-    zipCode: '78701',
-    propertyType: 'office',
-    squareFootage: 150000,
-    floors: 25,
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'prop-2',
-    name: 'South Austin Retail Center',
-    address: '456 South Lamar Blvd',
-    city: 'Austin',
-    state: 'TX',
-    zipCode: '78704',
-    propertyType: 'retail',
-    squareFootage: 75000,
-    floors: 2,
-    isActive: true,
-    createdAt: '2024-01-15T00:00:00Z',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'prop-3',
-    name: 'East Austin Industrial Complex',
-    address: '789 East 6th St',
-    city: 'Austin',
-    state: 'TX',
-    zipCode: '78702',
-    propertyType: 'warehouse',
-    squareFootage: 100000,
-    floors: 1,
-    isActive: true,
-    createdAt: '2024-02-01T00:00:00Z',
-    updatedAt: new Date().toISOString()
-  }
-];
 
 const SERVICES = [
   {
@@ -67,161 +22,108 @@ const SERVICES = [
     name: 'Pest Services',
     description: 'Professional pest control and prevention services for commercial properties',
     icon: Shield,
-    options: [
-      { id: 'pest-regular', name: 'Regular Pest Control', price: '200-400/month' },
-      { id: 'pest-premium', name: 'Premium Pest Management', price: '400-800/month' },
-      { id: 'pest-emergency', name: 'Emergency Treatment', price: '300-600/visit' }
-    ]
+    price: '200-400/month',
+    frequency: 'Monthly'
   },
   {
     id: 'pool',
     name: 'Pool Services',
     description: 'Complete pool maintenance, cleaning, and chemical balancing services',
     icon: Droplets,
-    options: [
-      { id: 'pool-weekly', name: 'Weekly Pool Maintenance', price: '200-400/month' },
-      { id: 'pool-biweekly', name: 'Bi-Weekly Pool Service', price: '150-300/month' },
-      { id: 'pool-repair', name: 'Pool Equipment Repair', price: 'Varies' }
-    ]
+    price: '200-400/month',
+    frequency: 'Weekly'
   },
   {
     id: 'landscape',
     name: 'Landscape Services',
     description: 'Professional landscaping maintenance including mowing, trimming, and seasonal care',
     icon: Leaf,
-    options: [
-      { id: 'landscape-basic', name: 'Basic Landscape Maintenance', price: '400-800/month' },
-      { id: 'landscape-premium', name: 'Premium Landscape Care', price: '800-1500/month' },
-      { id: 'landscape-seasonal', name: 'Seasonal Cleanup', price: '500-1000/visit' }
-    ]
+    price: '400-800/month',
+    frequency: 'Bi-Weekly'
   },
   {
     id: 'tree',
     name: 'Tree Services',
     description: 'Tree trimming, pruning, removal, and arborist services',
     icon: Leaf,
-    options: [
-      { id: 'tree-trimming', name: 'Tree Trimming & Pruning', price: '300-1000/visit' },
-      { id: 'tree-removal', name: 'Tree Removal', price: '500-2000/tree' },
-      { id: 'tree-health', name: 'Tree Health Assessment', price: '200-400/visit' }
-    ]
+    price: '300-1000/visit',
+    frequency: 'Quarterly'
   },
   {
     id: 'exterior',
     name: 'Exterior Services',
     description: 'Exterior cleaning, pressure washing, and building maintenance services',
     icon: Paintbrush,
-    options: [
-      { id: 'exterior-pressure', name: 'Pressure Washing', price: '300-800/visit' },
-      { id: 'exterior-window', name: 'Window Cleaning', price: '400-1200/visit' },
-      { id: 'exterior-facade', name: 'Facade Maintenance', price: '800-2000/visit' }
-    ]
+    price: '300-800/visit',
+    frequency: 'Monthly'
   },
   {
     id: 'janitorial',
     name: 'Janitorial Services',
     description: 'Comprehensive interior cleaning services for commercial properties',
     icon: Paintbrush,
-    options: [
-      { id: 'janitorial-daily', name: 'Daily Cleaning Service', price: '1000-3000/month' },
-      { id: 'janitorial-weekly', name: 'Weekly Deep Cleaning', price: '400-1200/month' },
-      { id: 'janitorial-special', name: 'Special Event Cleaning', price: '300-800/visit' }
-    ]
+    price: '1000-3000/month',
+    frequency: 'Daily'
   },
   {
     id: 'waste',
     name: 'Waste Services',
     description: 'Waste management and recycling services',
     icon: Wrench,
-    options: [
-      { id: 'waste-regular', name: 'Regular Waste Collection', price: '200-600/month' },
-      { id: 'waste-recycling', name: 'Recycling Program', price: '150-400/month' },
-      { id: 'waste-special', name: 'Special Waste Disposal', price: '300-800/visit' }
-    ]
+    price: '200-600/month',
+    frequency: 'Weekly'
   }
 ];
 
 export default function RequestWorkScreen() {
-  const [selectedProperty, setSelectedProperty] = useState<CommercialProperty | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [showServiceOptions, setShowServiceOptions] = useState(false);
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const getSelectedService = () => {
-    return SERVICES.find(s => s.id === selectedService);
-  };
+  // Define the function before using it
+  const getSelectedService = () => SERVICES.find(s => s.id === selectedService);
 
   const currentService = getSelectedService();
   const CurrentServiceIcon = currentService?.icon;
 
   const handleBack = () => {
-    if (showServiceOptions) {
-      setShowServiceOptions(false);
-      return;
-    }
     router.back();
-  };
-
-  const handlePropertySelect = (property: CommercialProperty) => {
-    setSelectedProperty(property);
-    setSelectedService(null);
-    setSelectedOption(null);
-    setShowServiceOptions(false);
   };
 
   const handleServiceSelect = (serviceId: string) => {
     setSelectedService(serviceId);
-    setSelectedOption(null);
-    setShowServiceOptions(true);
-  };
-
-  const handleOptionSelect = (optionId: string) => {
-    setSelectedOption(optionId);
   };
 
   const handleContinue = () => {
-    if (!selectedProperty || !selectedService) {
-      Alert.alert('Missing Information', 'Please select a property and service before continuing.');
+    if (!selectedService) {
+      Alert.alert('Missing Information', 'Please select a service before continuing.');
       return;
     }
 
-    if (showServiceOptions && !selectedOption) {
-      Alert.alert('Missing Information', 'Please select a service option before continuing.');
-      return;
-    }
-
-    if (showServiceOptions && selectedOption) {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
+    
+    // Simulate API call with a delay
+    setTimeout(() => {
+      setIsSubmitting(false);
       
-      // Simulate API call with a delay
-      setTimeout(() => {
-        setIsSubmitting(false);
-        
-        // Get selected service and option details
-        const selectedServiceObj = SERVICES.find(s => s.id === selectedService);
-        const selectedOptionObj = selectedServiceObj?.options.find(o => o.id === selectedOption);
-        
-        Alert.alert(
-          'Instant Quote',
-          `Your quote for ${selectedOptionObj?.name} at ${selectedProperty.name} is ready!\n\nEstimated Price: ${selectedOptionObj?.price}\n\nWould you like to schedule this service?`,
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { 
-              text: 'Schedule Now', 
-              onPress: () => {
-                Alert.alert('Service Scheduled', 'Your service has been scheduled. You will receive a confirmation email shortly.');
-                router.push('/(tabs)');
-              }
+      // Get selected service details
+      const selectedServiceObj = SERVICES.find(s => s.id === selectedService);
+      
+      Alert.alert(
+        'Instant Quote',
+        `Your quote for ${selectedServiceObj?.name} is ready!\n\nEstimated Price: ${selectedServiceObj?.price}\n\nFrequency: ${selectedServiceObj?.frequency}\n\nWould you like to add this service?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Add Service', 
+            onPress: () => {
+              Alert.alert('Service Added', 'Your new service has been added. You will receive a confirmation email shortly.');
+              router.push('/(tabs)');
             }
-          ]
-        );
-      }, 1000);
-      return;
-    }
-
-    setShowServiceOptions(true);
+          }
+        ]
+      );
+    }, 1000);
   };
 
   return (
@@ -231,234 +133,123 @@ export default function RequestWorkScreen() {
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
             <ArrowLeft color={CommercialColors.label} size={24} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>
-            {showServiceOptions ? getSelectedService()?.name || 'Select Options' : 'Request Work'}
-          </Text>
+          <Text style={styles.headerTitle}>Add New Service</Text>
           <View style={styles.placeholder} />
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {!showServiceOptions ? (
-            <>
-              <View style={styles.titleSection}>
-                <View style={styles.iconContainer}>
-                  <Wrench color={CommercialColors.systemBlue} size={32} />
-                </View>
-                <Text style={styles.title}>Request Professional Services</Text>
-                <Text style={styles.subtitle}>
-                  Get instant quotes for commercial property maintenance and services
-                </Text>
-              </View>
+          <View style={styles.titleSection}>
+            <View style={styles.iconContainer}>
+              <Plus color={CommercialColors.systemBlue} size={32} />
+            </View>
+            <Text style={styles.title}>Add New Service</Text>
+            <Text style={styles.subtitle}>
+              Select a service to add to your property
+            </Text>
+          </View>
 
-              {/* Property Selection */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Select Property</Text>
-                <Text style={styles.sectionSubtitle}>Choose which property needs service</Text>
+          {/* Service Selection */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Available Services</Text>
+            <Text style={styles.sectionSubtitle}>
+              Choose from our professional services
+            </Text>
+            
+            <View style={styles.serviceList}>
+              {SERVICES.map((service) => {
+                const ServiceIcon = service.icon;
+                const isSelected = selectedService === service.id;
                 
-                <View style={styles.propertyList}>
-                  {MOCK_PROPERTIES.map((property) => (
-                    <TouchableOpacity
-                      key={property.id}
-                      style={[
-                        styles.propertyCard,
-                        selectedProperty?.id === property.id && styles.propertyCardSelected
-                      ]}
-                      onPress={() => handlePropertySelect(property)}
-                    >
-                      <View style={styles.propertyCardContent}>
-                        <View style={[
-                          styles.propertyIconContainer,
-                          selectedProperty?.id === property.id && styles.propertyIconContainerSelected
+                return (
+                  <TouchableOpacity
+                    key={service.id}
+                    style={[
+                      styles.serviceCard,
+                      isSelected && styles.serviceCardSelected
+                    ]}
+                    onPress={() => handleServiceSelect(service.id)}
+                  >
+                    <View style={styles.serviceCardContent}>
+                      <View style={[
+                        styles.serviceIconContainer,
+                        isSelected && styles.serviceIconContainerSelected
+                      ]}>
+                        <ServiceIcon 
+                          color={isSelected ? CommercialColors.white : CommercialColors.systemBlue} 
+                          size={24} 
+                        />
+                      </View>
+                      
+                      <View style={styles.serviceInfo}>
+                        <Text style={[
+                          styles.serviceName,
+                          isSelected && styles.serviceNameSelected
                         ]}>
-                          <Building2 
-                            color={selectedProperty?.id === property.id ? CommercialColors.white : CommercialColors.systemBlue} 
-                            size={24} 
-                          />
-                        </View>
-                        
-                        <View style={styles.propertyInfo}>
-                          <Text style={[
-                            styles.propertyName,
-                            selectedProperty?.id === property.id && styles.propertyNameSelected
-                          ]}>
-                            {property.name}
-                          </Text>
-                          <Text style={[
-                            styles.propertyAddress,
-                            selectedProperty?.id === property.id && styles.propertyAddressSelected
-                          ]}>
-                            {property.address}, {property.city}, {property.state}
-                          </Text>
-                          <Text style={[
-                            styles.propertyDetails,
-                            selectedProperty?.id === property.id && styles.propertyDetailsSelected
-                          ]}>
-                            {property.propertyType.charAt(0).toUpperCase() + property.propertyType.slice(1)} • {property.squareFootage.toLocaleString()} sq ft
-                          </Text>
-                        </View>
-                        
-                        <View style={[
-                          styles.radioButton,
-                          selectedProperty?.id === property.id && styles.radioButtonSelected
+                          {service.name}
+                        </Text>
+                        <Text style={[
+                          styles.serviceDescription,
+                          isSelected && styles.serviceDescriptionSelected
                         ]}>
-                          {selectedProperty?.id === property.id && (
-                            <View style={styles.radioButtonInner} />
-                          )}
+                          {service.description}
+                        </Text>
+                        <View style={styles.serviceDetails}>
+                          <Text style={[
+                            styles.servicePrice,
+                            isSelected && styles.servicePriceSelected
+                          ]}>
+                            ${service.price} • {service.frequency}
+                          </Text>
                         </View>
                       </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-
-              {/* Service Selection */}
-              {selectedProperty && (
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Select Service Type</Text>
-                  <Text style={styles.sectionSubtitle}>
-                    Choose from our professional services
-                  </Text>
-                  
-                  <View style={styles.serviceGrid}>
-                    {SERVICES.map((service) => {
-                      const ServiceIcon = service.icon;
-                      return (
-                        <TouchableOpacity
-                          key={service.id}
-                          style={[
-                            styles.serviceCard,
-                            selectedService === service.id && styles.serviceCardSelected
-                          ]}
-                          onPress={() => handleServiceSelect(service.id)}
-                        >
-                          <View style={styles.serviceCardContent}>
-                            <View style={[
-                              styles.serviceIconContainer,
-                              selectedService === service.id && styles.serviceIconContainerSelected
-                            ]}>
-                              <ServiceIcon 
-                                color={selectedService === service.id ? CommercialColors.white : CommercialColors.systemBlue} 
-                                size={24} 
-                              />
-                            </View>
-                            <Text style={[
-                              styles.serviceName,
-                              selectedService === service.id && styles.serviceNameSelected
-                            ]}>
-                              {service.name}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </View>
-              )}
-            </>
-          ) : (
-            <>
-              {/* Service Options */}
-              <View style={styles.serviceDetailHeader}>
-                <View style={styles.serviceDetailIconContainer}>
-                  {CurrentServiceIcon && (
-                    <CurrentServiceIcon color={CommercialColors.white} size={32} />
-                  )}
-                </View>
-                <Text style={styles.serviceDetailTitle}>{currentService?.name}</Text>
-                <Text style={styles.serviceDetailDescription}>{currentService?.description}</Text>
-              </View>
-
-              <View style={styles.serviceOptionsSection}>
-                <Text style={styles.sectionTitle}>Select Service Option</Text>
-                <Text style={styles.sectionSubtitle}>Choose the specific service you need</Text>
-                
-                <View style={styles.serviceOptionsList}>
-                  {currentService?.options.map((option) => (
-                    <TouchableOpacity
-                      key={option.id}
-                      style={[
-                        styles.serviceOptionCard,
-                        selectedOption === option.id && styles.serviceOptionCardSelected
-                      ]}
-                      onPress={() => handleOptionSelect(option.id)}
-                    >
-                      <View style={styles.serviceOptionCardContent}>
-                        <View style={styles.serviceOptionInfo}>
-                          <Text style={[
-                            styles.serviceOptionName,
-                            selectedOption === option.id && styles.serviceOptionNameSelected
-                          ]}>
-                            {option.name}
-                          </Text>
-                          <Text style={[
-                            styles.serviceOptionPrice,
-                            selectedOption === option.id && styles.serviceOptionPriceSelected
-                          ]}>
-                            ${option.price}
-                          </Text>
-                        </View>
-                        
-                        <View style={[
-                          styles.radioButton,
-                          selectedOption === option.id && styles.radioButtonSelected
-                        ]}>
-                          {selectedOption === option.id && (
-                            <View style={styles.radioButtonInner} />
-                          )}
-                        </View>
+                      
+                      <View style={[
+                        styles.radioButton,
+                        isSelected && styles.radioButtonSelected
+                      ]}>
+                        {isSelected && (
+                          <View style={styles.radioButtonInner} />
+                        )}
                       </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
 
-              {/* Service Images */}
-              <View style={styles.serviceImagesSection}>
-                <Text style={styles.sectionTitle}>Service Gallery</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.serviceImagesScroll}>
-                  <View style={styles.serviceImageContainer}>
-                    <Image 
-                      source={{ uri: 'https://images.pexels.com/photos/3626733/pexels-photo-3626733.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}
-                      style={styles.serviceImage}
-                    />
-                  </View>
-                  <View style={styles.serviceImageContainer}>
-                    <Image 
-                      source={{ uri: 'https://images.pexels.com/photos/4239146/pexels-photo-4239146.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}
-                      style={styles.serviceImage}
-                    />
-                  </View>
-                  <View style={styles.serviceImageContainer}>
-                    <Image 
-                      source={{ uri: 'https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}
-                      style={styles.serviceImage}
-                    />
-                  </View>
-                </ScrollView>
+          {/* Additional Details */}
+          {selectedService && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Additional Details</Text>
+              <Text style={styles.sectionSubtitle}>
+                Provide any specific requirements (optional)
+              </Text>
+              
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Describe any specific needs or special requirements..."
+                  placeholderTextColor={CommercialColors.tertiaryLabel}
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline
+                  numberOfLines={4}
+                  textAlignVertical="top"
+                />
               </View>
-
-              {/* Additional Details */}
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Additional Details</Text>
-                <Text style={styles.sectionSubtitle}>
-                  Provide any specific requirements or preferences (optional)
-                </Text>
-                
-                <View style={styles.textInputContainer}>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Describe any specific needs, timing preferences, or special requirements..."
-                    placeholderTextColor={CommercialColors.tertiaryLabel}
-                    value={description}
-                    onChangeText={setDescription}
-                    multiline
-                    numberOfLines={4}
-                    textAlignVertical="top"
-                  />
-                </View>
-              </View>
-            </>
+            </View>
           )}
+
+          <View style={styles.infoCard}>
+            <Text style={styles.infoTitle}>How our pricing works</Text>
+            <Text style={styles.infoText}>
+              • Prices are estimates based on property size and service frequency{'\n'}
+              • Final pricing will be confirmed after property assessment{'\n'}
+              • All services include professional equipment and supplies{'\n'}
+              • Cancel or modify services anytime with 24-hour notice
+            </Text>
+          </View>
 
           <View style={styles.bottomSpacing} />
         </ScrollView>
@@ -466,11 +257,11 @@ export default function RequestWorkScreen() {
         <View style={styles.bottomSection}>
           <TouchableOpacity 
             style={[
-              styles.continueButton,
-              (!selectedProperty || !selectedService || (showServiceOptions && !selectedOption) || isSubmitting) && styles.disabledButton
+              styles.continueButton, 
+              (!selectedService || isSubmitting) && styles.disabledButton
             ]} 
             onPress={handleContinue}
-            disabled={!selectedProperty || !selectedService || (showServiceOptions && !selectedOption) || isSubmitting}
+            disabled={!selectedService || isSubmitting}
           >
             <View style={styles.continueButtonBackground}>
               {isSubmitting ? (
@@ -478,7 +269,7 @@ export default function RequestWorkScreen() {
               ) : (
                 <>
                   <Text style={styles.continueButtonText}>
-                    {showServiceOptions ? 'Get Instant Quote' : 'Continue'}
+                    Get Instant Quote
                   </Text>
                   <ChevronRight color={CommercialColors.white} size={20} />
                 </>
@@ -528,9 +319,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: CommercialSpacing.xxl,
   },
   titleSection: {
-    alignItems: 'center',
-    marginTop: CommercialSpacing.xxxl,
-    marginBottom: CommercialSpacing.xxl,
+    alignItems: 'center', 
+    marginTop: CommercialSpacing.xxl,
+    marginBottom: CommercialSpacing.xl,
   },
   iconContainer: {
     width: 64,
@@ -566,7 +357,7 @@ const styles = StyleSheet.create({
     color: CommercialColors.secondaryLabel,
     marginBottom: CommercialSpacing.lg,
   },
-  propertyList: {
+  serviceList: {
     gap: CommercialSpacing.md,
   },
   propertyCard: {
@@ -641,7 +432,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: CommercialColors.systemBlue,
   },
-  serviceGrid: {
+  serviceList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: CommercialSpacing.md,
@@ -649,7 +440,7 @@ const styles = StyleSheet.create({
   serviceCard: {
     width: '48%',
     aspectRatio: 1,
-    borderRadius: CommercialBorderRadius.large,
+    borderRadius: CommercialBorderRadius.medium,
     borderWidth: 2,
     borderColor: CommercialColors.separator,
     backgroundColor: CommercialColors.cardBackground,
@@ -660,7 +451,7 @@ const styles = StyleSheet.create({
     backgroundColor: CommercialColors.systemBlueLight,
   },
   serviceCardContent: {
-    flex: 1,
+    height: '100%',
     padding: CommercialSpacing.lg,
     alignItems: 'center',
     justifyContent: 'center',
@@ -681,6 +472,10 @@ const styles = StyleSheet.create({
     ...CommercialTypography.headline,
     color: CommercialColors.label,
     textAlign: 'center',
+    marginBottom: CommercialSpacing.xs,
+  },
+  serviceDescription: {
+    ...CommercialTypography.caption1,
   },
   serviceNameSelected: {
     color: CommercialColors.systemBlueDark,
@@ -690,6 +485,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: CommercialSpacing.xxxl,
     marginBottom: CommercialSpacing.xxl,
+  },
+  serviceDetails: {
+    marginTop: CommercialSpacing.xs,
   },
   serviceDetailIconContainer: {
     width: 80,
@@ -711,6 +509,10 @@ const styles = StyleSheet.create({
     color: CommercialColors.secondaryLabel,
     textAlign: 'center',
     maxWidth: 320,
+  },
+  servicePrice: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.systemBlue,
   },
   serviceOptionsSection: {
     marginBottom: CommercialSpacing.xxl,
@@ -783,6 +585,22 @@ const styles = StyleSheet.create({
     color: CommercialColors.label,
     padding: CommercialSpacing.lg,
     minHeight: 100,
+  },
+  infoCard: {
+    backgroundColor: CommercialColors.systemBlueLight,
+    borderRadius: CommercialBorderRadius.large,
+    padding: CommercialSpacing.lg,
+    marginBottom: CommercialSpacing.xl,
+  },
+  infoTitle: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.systemBlueDark,
+    marginBottom: CommercialSpacing.sm,
+  },
+  infoText: {
+    ...CommercialTypography.body,
+    color: CommercialColors.systemBlueDark,
+    lineHeight: 20,
   },
   bottomSpacing: {
     height: CommercialSpacing.xl,

@@ -20,8 +20,8 @@ import { CommercialColors, CommercialSpacing, CommercialTypography, CommercialBo
 const MOCK_CONVERSATIONS = [
   {
     id: '1',
-    type: 'technician',
-    name: 'Mike Johnson',
+    type: 'account_manager',
+    name: 'Mike Johnson - Account Manager',
     service: 'Pool Maintenance',
     lastMessage: 'I\'ll be there around 10 AM tomorrow for the pool cleaning.',
     timestamp: '2 hours ago',
@@ -31,7 +31,7 @@ const MOCK_CONVERSATIONS = [
   {
     id: '2',
     type: 'sales',
-    name: 'Cerv Support',
+    name: 'Sarah Wilson - Support Specialist',
     service: 'General Inquiry',
     lastMessage: 'Hi! How can we help you today?',
     timestamp: '1 day ago',
@@ -41,7 +41,7 @@ const MOCK_CONVERSATIONS = [
   {
     id: '3',
     type: 'technician',
-    name: 'Sarah Wilson',
+    name: 'David Lee - Landscaping Specialist',
     service: 'Landscaping',
     lastMessage: 'Great! The garden is looking much better now.',
     timestamp: '3 days ago',

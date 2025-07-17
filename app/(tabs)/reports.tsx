@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Modal
+  Modal
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FileText, Download, Calendar, TrendingUp, Building2, DollarSign, TriangleAlert as AlertTriangle, ChevronRight, X } from 'lucide-react-native';
@@ -198,6 +199,9 @@ export default function ReportsTab() {
   const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly');
   const [selectedReport, setSelectedReport] = useState<MonthlyReport | null>(null);
   const [showFullReport, setShowFullReport] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<'all' | string>('all');
+  const [selectedReport, setSelectedReport] = useState<MonthlyReport | null>(null);
+  const [showFullReport, setShowFullReport] = useState(false);
   const [showCustomReport, setShowCustomReport] = useState(false);
 
   const handleExportReport = (report: MonthlyReport) => {
@@ -206,6 +210,7 @@ export default function ReportsTab() {
 
   const handleViewDetails = (report: MonthlyReport) => {
     setSelectedReport(report);
+    setShowFullReport(true);
     setShowFullReport(true);
   };
 
@@ -410,6 +415,215 @@ export default function ReportsTab() {
             <View style={styles.bottomSpacing} />
           </ScrollView>
         </SafeAreaView>
+        
+        {/* Full Report Modal */}
+        <Modal
+          visible={showFullReport}
+          animationType="slide"
+          presentationStyle="pageSheet"
+        >
+          <SafeAreaView style={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>
+                {selectedReport && (
+                  selectedPeriod === 'yearly' 
+                    ? `${selectedReport.month} Annual Report`
+                    : selectedPeriod === 'quarterly'
+                    ? `${selectedReport.month} Report`
+                    : new Date(selectedReport.month + '-01').toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric'
+                      }) + ' Report'
+                )}
+              </Text>
+              <TouchableOpacity onPress={() => setShowFullReport(false)}>
+                <X color={CommercialColors.label} size={24} />
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.propertyFilter}>
+              <Text style={styles.filterLabel}>Property:</Text>
+              <View style={styles.filterOptions}>
+                <TouchableOpacity 
+                  style={[
+                    styles.filterOption,
+                    selectedProperty === 'all' && styles.filterOptionSelected
+                  ]}
+                  onPress={() => setSelectedProperty('all')}
+                >
+                  <Text style={[
+                    styles.filterOptionText,
+                    selectedProperty === 'all' && styles.filterOptionTextSelected
+                  ]}>All Properties</Text>
+                </TouchableOpacity>
+                
+                {selectedReport && Object.keys(selectedReport.propertyBreakdown).map(propId => {
+                  const propertyName = propId === 'prop-1' ? 'Downtown Office Tower' :
+                                     propId === 'prop-2' ? 'Westside Retail Center' :
+                                     'Industrial Park Unit A';
+                  return (
+                    <TouchableOpacity 
+                      key={propId}
+                      style={[
+                        styles.filterOption,
+                        selectedProperty === propId && styles.filterOptionSelected
+                      ]}
+                      onPress={() => setSelectedProperty(propId)}
+                    >
+                      <Text style={[
+                        styles.filterOptionText,
+                        selectedProperty === propId && styles.filterOptionTextSelected
+                      ]}>{propertyName}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+            
+            <ScrollView style={styles.modalContent}>
+              {selectedReport && (
+                <>
+                  <View style={styles.fullReportSection}>
+                    <Text style={styles.fullReportSectionTitle}>Executive Summary</Text>
+                    <Text style={styles.fullReportText}>
+                      This {selectedPeriod} report covers {selectedReport.summary.totalVisits} service visits 
+                      {selectedProperty !== 'all' ? ' for this property' : ' across your portfolio'}, 
+                      with {selectedReport.summary.completedServices} services completed successfully. 
+                      Your Cerv Score improved by {selectedReport.summary.cervScoreChange} points, 
+                      indicating strong property management performance.
+                    </Text>
+                  </View>
+
+                  <View style={styles.fullReportSection}>
+                    <Text style={styles.fullReportSectionTitle}>Critical Services</Text>
+                    <Text style={styles.fullReportText}>
+                      <Text style={styles.boldText}>Pest Control:</Text> Due to seasonal weather changes, we've increased 
+                      pest monitoring frequency to prevent potential issues.{'\n\n'}
+                      <Text style={styles.boldText}>Landscaping:</Text> Additional attention was given to irrigation systems 
+                      due to higher than average temperatures.
+                    </Text>
+                  </View>
+
+                  {selectedProperty === 'all' ? (
+                    <View style={styles.fullReportSection}>
+                      <Text style={styles.fullReportSectionTitle}>Property Performance</Text>
+                      {Object.entries(selectedReport.propertyBreakdown).map(([propertyId, data]) => {
+                        const propertyName = propertyId === 'prop-1' ? 'Downtown Office Tower' :
+                                           propertyId === 'prop-2' ? 'Westside Retail Center' :
+                                           'Industrial Park Unit A';
+                        
+                        return (
+                          <View key={propertyId} style={styles.propertyBreakdownCard}>
+                            <Text style={styles.propertyBreakdownName}>{propertyName}</Text>
+                            <View style={styles.propertyBreakdownStats}>
+                              <Text style={styles.propertyBreakdownStat}>Visits: {data.visits}</Text>
+                              <Text style={styles.propertyBreakdownStat}>Services: {data.services}</Text>
+                              <Text style={styles.propertyBreakdownStat}>Issues: {data.issues}</Text>
+                              <Text style={styles.propertyBreakdownStat}>Spend: ${data.spend.toLocaleString()}</Text>
+                              <Text style={styles.propertyBreakdownStat}>Score: {data.cervScore}</Text>
+                            </View>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  ) : (
+                    <View style={styles.fullReportSection}>
+                      <Text style={styles.fullReportSectionTitle}>Property Details</Text>
+                      {Object.entries(selectedReport.propertyBreakdown)
+                        .filter(([propId]) => propId === selectedProperty)
+                        .map(([propertyId, data]) => {
+                          const propertyName = propertyId === 'prop-1' ? 'Downtown Office Tower' :
+                                             propertyId === 'prop-2' ? 'Westside Retail Center' :
+                                             'Industrial Park Unit A';
+                          
+                          return (
+                            <View key={propertyId} style={styles.propertyDetailCard}>
+                              <Text style={styles.propertyDetailName}>{propertyName}</Text>
+                              <View style={styles.propertyDetailItem}>
+                                <Text style={styles.propertyDetailLabel}>Total Visits:</Text>
+                                <Text style={styles.propertyDetailValue}>{data.visits}</Text>
+                              </View>
+                              <View style={styles.propertyDetailItem}>
+                                <Text style={styles.propertyDetailLabel}>Completed Services:</Text>
+                                <Text style={styles.propertyDetailValue}>{data.services}</Text>
+                              </View>
+                              <View style={styles.propertyDetailItem}>
+                                <Text style={styles.propertyDetailLabel}>Open Issues:</Text>
+                                <Text style={styles.propertyDetailValue}>{data.issues}</Text>
+                              </View>
+                              <View style={styles.propertyDetailItem}>
+                                <Text style={styles.propertyDetailLabel}>Total Spend:</Text>
+                                <Text style={styles.propertyDetailValue}>${data.spend.toLocaleString()}</Text>
+                              </View>
+                              <View style={styles.propertyDetailItem}>
+                                <Text style={styles.propertyDetailLabel}>Current Cerv Score:</Text>
+                                <Text style={styles.propertyDetailValue}>{data.cervScore}</Text>
+                              </View>
+                            </View>
+                          );
+                      })}
+                    </View>
+                  )}
+
+                  <View style={styles.fullReportSection}>
+                    <Text style={styles.fullReportSectionTitle}>Service Breakdown</Text>
+                    {Object.entries(selectedReport.serviceBreakdown).map(([service, data]) => (
+                      <View key={service} style={styles.serviceBreakdownItem}>
+                        <Text style={styles.serviceBreakdownName}>{service}</Text>
+                        <Text style={styles.serviceBreakdownData}>
+                          {data.count} services • ${data.cost.toLocaleString()}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  <View style={styles.fullReportSection}>
+                    <Text style={styles.fullReportSectionTitle}>Service Visits</Text>
+                    <View style={styles.visitsList}>
+                      {[
+                        { date: '2024-01-05', service: 'HVAC Maintenance', property: 'Downtown Office Tower', notes: 'Quarterly inspection and filter replacement' },
+                        { date: '2024-01-12', service: 'Cleaning Services', property: 'Westside Retail Center', notes: 'Deep cleaning of common areas' },
+                        { date: '2024-01-18', service: 'Landscaping', property: 'Industrial Park Unit A', notes: 'Irrigation system maintenance' },
+                        { date: '2024-01-25', service: 'Security Systems', property: 'Downtown Office Tower', notes: 'Camera system firmware update' },
+                      ].filter(visit => selectedProperty === 'all' || 
+                        (selectedProperty === 'prop-1' && visit.property === 'Downtown Office Tower') ||
+                        (selectedProperty === 'prop-2' && visit.property === 'Westside Retail Center') ||
+                        (selectedProperty === 'prop-3' && visit.property === 'Industrial Park Unit A')
+                      ).map((visit, index) => (
+                        <View key={index} style={styles.visitItem}>
+                          <Text style={styles.visitDate}>{new Date(visit.date).toLocaleDateString()}</Text>
+                          <Text style={styles.visitService}>{visit.service}</Text>
+                          <Text style={styles.visitProperty}>{visit.property}</Text>
+                          <Text style={styles.visitNotes}>{visit.notes}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+
+                  <View style={styles.fullReportSection}>
+                    <Text style={styles.fullReportSectionTitle}>Recommendations</Text>
+                    <Text style={styles.fullReportText}>
+                      • Continue current maintenance schedule for optimal performance{'\n'}
+                      • Consider increasing landscape service frequency during peak season{'\n'}
+                      • Monitor pest control effectiveness in humid months{'\n'}
+                      • Schedule quarterly deep cleaning for high-traffic areas
+                    </Text>
+                  </View>
+                  
+                  <TouchableOpacity 
+                    style={styles.exportPdfButton}
+                    onPress={() => handleExportReport(selectedReport)}
+                  >
+                    <View style={styles.exportPdfButtonBackground}>
+                      <Download color={CommercialColors.white} size={20} />
+                      <Text style={styles.exportPdfButtonText}>Export as PDF</Text>
+                    </View>
+                  </TouchableOpacity>
+                </>
+              )}
+            </ScrollView>
+          </SafeAreaView>
+        </Modal>
       </View>
 
       {/* Full Report Modal */}
@@ -797,6 +1011,198 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: CommercialSpacing.xl,
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    backgroundColor: CommercialColors.background,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: CommercialColors.separator,
+  },
+  modalTitle: {
+    ...CommercialTypography.title2,
+    color: CommercialColors.label,
+  },
+  propertyFilter: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: CommercialColors.separator,
+  },
+  filterLabel: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.label,
+    marginBottom: 8,
+  },
+  filterOptions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  filterOption: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: CommercialColors.secondaryBackground,
+    borderWidth: 1,
+    borderColor: CommercialColors.separator,
+  },
+  filterOptionSelected: {
+    backgroundColor: CommercialColors.systemBlue,
+    borderColor: CommercialColors.systemBlue,
+  },
+  filterOptionText: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.secondaryLabel,
+  },
+  filterOptionTextSelected: {
+    color: CommercialColors.white,
+    fontWeight: '600',
+  },
+  modalContent: {
+    flex: 1,
+    padding: 24,
+  },
+  fullReportSection: {
+    marginBottom: 32,
+  },
+  fullReportSectionTitle: {
+    ...CommercialTypography.title3,
+    color: CommercialColors.label,
+    marginBottom: 16,
+  },
+  fullReportText: {
+    ...CommercialTypography.body,
+    color: CommercialColors.secondaryLabel,
+    lineHeight: 24,
+  },
+  boldText: {
+    fontWeight: '700',
+    color: CommercialColors.label,
+  },
+  propertyBreakdownCard: {
+    backgroundColor: CommercialColors.cardBackground,
+    borderRadius: CommercialBorderRadius.medium,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: CommercialColors.separator,
+  },
+  propertyBreakdownName: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.label,
+    marginBottom: 8,
+  },
+  propertyBreakdownStats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  propertyBreakdownStat: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.secondaryLabel,
+    backgroundColor: CommercialColors.secondarySystemFill,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  propertyDetailCard: {
+    backgroundColor: CommercialColors.cardBackground,
+    borderRadius: CommercialBorderRadius.medium,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: CommercialColors.separator,
+  },
+  propertyDetailName: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.label,
+    marginBottom: 16,
+  },
+  propertyDetailItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 0.5,
+    borderBottomColor: CommercialColors.separator,
+  },
+  propertyDetailLabel: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.secondaryLabel,
+  },
+  propertyDetailValue: {
+    ...CommercialTypography.subheadline,
+    fontWeight: '600',
+    color: CommercialColors.label,
+  },
+  serviceBreakdownItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: CommercialColors.separator,
+  },
+  serviceBreakdownName: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.label,
+  },
+  serviceBreakdownData: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.secondaryLabel,
+  },
+  visitsList: {
+    gap: 12,
+  },
+  visitItem: {
+    backgroundColor: CommercialColors.cardBackground,
+    borderRadius: CommercialBorderRadius.medium,
+    padding: 12,
+    borderWidth: 0.5,
+    borderColor: CommercialColors.separator,
+  },
+  visitDate: {
+    ...CommercialTypography.caption1,
+    color: CommercialColors.tertiaryLabel,
+    marginBottom: 4,
+  },
+  visitService: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.label,
+    marginBottom: 4,
+  },
+  visitProperty: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.systemBlue,
+    marginBottom: 4,
+  },
+  visitNotes: {
+    ...CommercialTypography.subheadline,
+    color: CommercialColors.secondaryLabel,
+  },
+  exportPdfButton: {
+    backgroundColor: CommercialColors.systemBlue,
+    borderRadius: CommercialBorderRadius.large,
+    marginVertical: 24,
+    overflow: 'hidden',
+  },
+  exportPdfButtonBackground: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    gap: 8,
+  },
+  exportPdfButtonText: {
+    ...CommercialTypography.headline,
+    color: CommercialColors.white,
   },
   // Modal styles
   modalContainer: {
